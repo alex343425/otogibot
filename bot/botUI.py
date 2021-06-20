@@ -537,7 +537,7 @@ async def publicUI(message,bot):
   
             if search_result:
                 name_jp = str(list_num) + '.技能名:' + x['n'] + '【' + setskilltype(skillcate)
-                name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr']) +' '+str(x['id'])
+                name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr']) 
                 text_jp = '效果:' + x['d'] + '\n'
                 if skillsource > 0:
                     text_jp += '技能來源:' + sourcename + '\n'
