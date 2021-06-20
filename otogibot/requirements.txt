@@ -1,0 +1,9 @@
+discord.py
+pillow
+emoji
+numpy
+requests
+bs4
+datetime
+UnityPy
+pycryptodome
