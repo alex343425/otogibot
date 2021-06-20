@@ -1,6 +1,7 @@
 import cfg
 import requests
 from idparse import weaponclass, attribute
+from operator import itemgetter
 
 addressS = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MSkills.json'
 addressM = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MMonsters.json'
@@ -203,6 +204,14 @@ def skillsourcecate():
         if x['er'] == 'm':
             continue
         [x['tm'],x['tc'],x['sp'],x['er']] = check_cate(x['rsid'],x['id'],x['l'],x['ml'])
+        if x['tm'] == 0:
+            x['tm']=9999999 
+    
+    cfg.MSkills = sorted(cfg.MSkills, key=itemgetter('tm'))
+    for x in cfg.MSkills:
+        if x['tm'] == 9999999:
+            x['tm']=0
+    
 
 def updatemfiles():
     cfg.MSkills = requests.get(addressS).json()
