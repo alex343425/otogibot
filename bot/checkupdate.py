@@ -9,18 +9,12 @@ from io import BytesIO
 from bs4 import BeautifulSoup
 
 async def checkupdate(bot):
-    url_tw_now='https://otogi-traffic-dmm-tw.trafficmanager.net/api/ULoginPopup/Now' ###
-    
-    
     starting_channel = bot.get_channel(855880177224253440)
     async def get_img(img_url):
         return Image.open(BytesIO(requests.get(img_url).content))
     try:
         news_latest = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
         news_now = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
-        
-        news_now_tw = requests.get(url_tw_now, headers={'token': cfg.token_cn}).json() ###
-        
         maint_img = await get_img('https://otogimigwestsp.blob.core.windows.net/static/pc/maintenance/maintenance.png')
         ranking = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
         foobaa_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
@@ -41,8 +35,6 @@ async def checkupdate(bot):
     reminder_channel_alt = bot.get_channel(624974729689694230)
     private_chat_channel = bot.get_channel(820282343247183882)
     debug_channel = bot.get_channel(855880392045363230)
-    tw_bot_channel= bot.get_channel(626962779424817182) ###
-    
     while True:
         if failure == 1:
             break
@@ -197,8 +189,6 @@ async def checkupdate(bot):
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
                 news_now_check = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
-                
-                news_now_check_tw = requests.get(url_tw_now, headers={'token': cfg.token_cn}).json() ###
             except:
                 await starting_channel.send('獲取公告失敗')
                 continue
@@ -252,7 +242,7 @@ async def checkupdate(bot):
             if overall_check_mark == 1:
                 news_latest = news_latest_check
             overall_check_mark = 0
-            news_i = 1            
+            news_i = 1
             for x in news_now_check:
                 check_mark = 0
                 for y in news_now:
@@ -278,45 +268,6 @@ async def checkupdate(bot):
                         await starting_channel.send(img_url)
             if overall_check_mark == 1:
                 news_now = news_now_check
-            ###台版VV
-            overall_check_mark = 0
-            news_i = 1
-            
-            maxint=0
-            for x in news_now_check_tw:
-                sq=x['ImagePath']
-                sq=sq.split('/')[1]
-                sq=sq.split('-')[1]
-                if int(sq)>maxint:
-                    maxint=int(sq)
-            
-            
-            for x in news_now_check_tw:
-                check_mark = 0
-                for y in news_now_tw:
-                    if y['ImagePath'] == x['ImagePath']:
-                        check_mark = 1
-                        break
-                if check_mark == 0:
-                    overall_check_mark = 1                                        
-                    img_url = 'https://otogi-cdn-dmm-tw.azureedge.net/static2-'+maxint+'-0/pc/Banner/Info/' + x['ImagePath']
-                    try:
-                        img = await get_img(img_url)
-                        img.save('news.png')
-                        file1 = discord.File('news.png',filename='news.png')                        
-                        myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
-                        myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
-                        myembed.set_image(url="attachment://news.png")
-                        await tw_bot_channel.send(file=file1, embed=myembed)                        
-                        news_i += 1
-                    except:
-                        await starting_channel.send('獲取活动圖片失敗')
-                        await starting_channel.send(img_url)
-            if overall_check_mark == 1:
-                news_now_tw = news_now_check_tw
-                
-            ###台版^^
-            
             try:
                 maint_img = await get_img('https://otogimigwestsp.blob.core.windows.net/static/pc/maintenance/maintenance.png')
             except:
