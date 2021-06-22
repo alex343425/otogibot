@@ -54,7 +54,8 @@ async def privateUI(message,bot):
             return Image.open(BytesIO(requests.get(img_url).content))
         embed_list = []
         for i in range(0,7):
-            url = 'https://api-spbrowser.otogi-frontier.com/api/UFriend/Deck/'+user_id+'/'+str(i)
+            url = 'https://api-pc.otogi-frontier.com/api/UFriend/Deck/'+user_id+'/'+str(i)
+            
             try:
                 party = requests.get(url, headers={'token': cfg.token_jp}).json()
             except:
