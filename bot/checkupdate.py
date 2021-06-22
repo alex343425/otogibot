@@ -68,7 +68,7 @@ async def checkupdate(bot):
                                 await private_chat_channel.send(text)
                                 for i in range(0,5):
                                     flag = 0
-                                    url_inspect = 'https://api-spbrowser.otogi-frontier.com/api/UFriend/Deck/'+str(x["UUserId"])+'/'+str(i)
+                                    url_inspect = 'https://api-pc.otogi-frontier.com/api/UFriend/Deck/'+str(x["UUserId"])+'/'+str(i)
                                     try:
                                         party = requests.get(url_inspect, headers={'token': cfg.token_jp}).json()
                                         for y in x["Party"]:
