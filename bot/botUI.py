@@ -540,8 +540,9 @@ async def publicUI(message,bot):
                 if x['tm'] in norepeated:
                     search_result = False
                 else:
-                    search_result = True
-                    norepeated.append(x['tm'])
+                    search_result = isinand(keyword,x['d'])
+                    if search_result == True:
+                        norepeated.append(x['tm'])
             else:
                 search_result = isinand(keyword,x['n']+x['d'])
   
