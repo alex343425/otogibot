@@ -409,7 +409,8 @@ async def publicUI(message,bot):
         page_num = 1
         myembed = discord.Embed(title='技能搜索結果', description='關鍵字:' + kw_dis, color=10181046)
         myembed.set_footer(text=nickname + "的請求")
-                    
+        #不重複結果
+        norepeated=[]            
         for x in cfg.MSkills:
             if x['l'] != x['ml']:
                 continue
@@ -437,6 +438,8 @@ async def publicUI(message,bot):
             skillsource = x['tm']
             skillcate = x['tc']
             sourcename = x['sp']
+            
+
             
             count = 1
             for k in 'QWERTYUIASDFG':
@@ -533,6 +536,12 @@ async def publicUI(message,bot):
                 search_result = isindamage(keyword,x['d'])
             elif 'e' in cate:
                 search_result = isininterval(keyword,x['d'])
+            elif 'z' in cate:####不重複
+                if x['tm'] in norepeated:
+                    search_result = False
+                else
+                    search_result = True
+                    norepeated.append(x['tm'])
             else:
                 search_result = isinand(keyword,x['n']+x['d'])
   
