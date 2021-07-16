@@ -539,7 +539,7 @@ async def publicUI(message,bot):
             elif 'z' in cate:####不重複
                 if x['tm'] in norepeated:
                     search_result = False
-                else
+                else:
                     search_result = True
                     norepeated.append(x['tm'])
             else:
