@@ -8,6 +8,26 @@ from PIL import Image, ImageOps
 from io import BytesIO
 from bs4 import BeautifulSoup
 
+def ch_number(i):
+    lch = ['','萬','億','兆','京','垓','秭','穰']
+    i = str(i)
+    l=[]
+    while True:
+        if int(i) > 10000:
+            l.append(i[-4:])
+            i = i[0:len(i)-4]
+        else:
+            l.append(i)
+            break
+    list.reverse(l)
+    result = ''
+    i=len(l)-1
+    for x in l:
+        result += x + lch[i]
+        i-=1
+    return result
+
+
 async def checkupdate(bot):
     starting_channel = bot.get_channel(855880177224253440)
     async def get_img(img_url):
@@ -158,14 +178,14 @@ async def checkupdate(bot):
                                 except:
                                     pass
                                 if y == []:
-                                    text = '**'+x['Name']+'**登上了競技場榜單,排名為: **'+str(x["Rank"])+'**,分數為: **'+str(x['Score'])+'**.謝謝海苔!'
+                                    text = '**'+x['Name']+'**登上了競技場榜單,排名為: **'+str(x["Rank"])+'**,分數為: **'+ ch_number(str(x['Score'])) +'**.謝謝海苔!'
                                     await reminder_channel_alt.send(text)
                                 else:
                                     if x['Rank'] < y['Rank']:
-                                        text = '**'+x['Name']+'**的競技場排名從**'+str(y["Rank"])+'**上升為**'+str(x["Rank"])+'**,分數為: **'+str(x['Score'])+'**.謝謝海苔!'
+                                        text = '**'+x['Name']+'**的競技場排名從**'+str(y["Rank"])+'**上升為**'+str(x["Rank"])+'**,分數為: **'+ ch_number(str(x['Score']))+'**.謝謝海苔!'
                                         await reminder_channel_alt.send(text)
                                     elif x['Score'] > y['Score']:
-                                        text = '**'+x['Name']+'**的競技場分數從**'+str(y["Score"])+'**上升為**'+str(x["Score"])+'**,排名為: **'+str(x['Rank'])+'**.謝謝海苔!'
+                                        text = '**'+x['Name']+'**的競技場分數從**'+ch_number(str(y["Score"]) )+'**上升為**'+ch_number(str(x["Score"]))+'**,排名為: **'+str(x['Rank'])+'**.謝謝海苔!'
                                         await reminder_channel_alt.send(text)
                                     else:
                                         pass
@@ -177,7 +197,7 @@ async def checkupdate(bot):
                     for x in ranking["ThisWeekTopPlayers"]:
                         try:
                             if '海苔' in x["Name"]+x["Introduction"]:
-                                text = x["Name"]+'登上了競技場第**'+str(x["Rank"])+'**名,分數是: **'+str(x["Score"])+'**.謝謝海苔!'
+                                text = x["Name"]+'登上了競技場第**'+str(x["Rank"])+'**名,分數是: **'+ch_number(str(x["Score"]))+'**.謝謝海苔!'
                                 await reminder_channel_alt.send(text)
                         except:
                             pass
