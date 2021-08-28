@@ -38,9 +38,13 @@ privateUICommandList = {'?getcg',
                         }
 
 publicUICommandList = {'?char',
+                       '？char',
                        '?nick',
+                       '？nick',
                        '?spirit',
+                       '？spirit',
                        '?be',
+                       '？be',
                        '!story',
                        '!event'
                        }
@@ -80,7 +84,7 @@ async def on_message(message):
         await privateUI(message,bot)
         return
     
-    if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('?story') or message.content.startswith('?event'):
+    if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('？skill') or message.content.startswith('?story') or message.content.startswith('?event'):
         await publicUI(message,bot)
         return
 

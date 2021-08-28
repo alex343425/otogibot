@@ -389,9 +389,10 @@ async def privateUI(message,bot):
 
 async def publicUI(message,bot):
     nickname = message.author.name
-    if message.content.lower().startswith('?skill'):
+    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill'):
         keyword = message.content.split(' ')
         n = len(keyword)
+        keyword[0] = keyword[0].replace('？','?')
         cate = keyword[0][6:]
         keyword = message.content.lower().split(' ')[1:n]
         
@@ -692,7 +693,7 @@ async def publicUI(message,bot):
                         pass
         return
     
-    if message.content.lower().startswith('?char') or message.content.lower().startswith('?nick'):
+    if message.content.lower().startswith('?char') or message.content.lower().startswith('？char') or message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick')::
         keyword = message.content.lower().split(' ')
         n = len(keyword)
         keyword = keyword[1:n]
@@ -852,7 +853,7 @@ async def publicUI(message,bot):
                         return
         return
       
-    if message.content.lower().startswith('?spirit'):
+    if message.content.lower().startswith('?spirit') or message.content.lower().startswith('？spirit'):
         keyword = message.content.lower().split(' ')
         n = len(keyword)
         keyword = keyword[1:n]
@@ -948,7 +949,7 @@ async def publicUI(message,bot):
                         return
         return
     
-    if message.content.lower().startswith('?be'):
+    if message.content.lower().startswith('?be') or message.content.lower().startswith('？be'):
         try:
             url = 'https://api-pc.otogi-frontier.com/api/Events/17001/ranking/'
             response = requests.get(url, headers={'token': cfg.token_jp})
