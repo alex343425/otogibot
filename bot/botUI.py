@@ -693,7 +693,7 @@ async def publicUI(message,bot):
                         pass
         return
     
-    if message.content.lower().startswith('?char') or message.content.lower().startswith('？char') or message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick')::
+    if message.content.lower().startswith('?char') or message.content.lower().startswith('？char') or message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick'):
         keyword = message.content.lower().split(' ')
         n = len(keyword)
         keyword = keyword[1:n]
