@@ -734,6 +734,8 @@ async def publicUI(message,bot):
                             if z['rsid'] == y['msid']:
                                 myembed.add_field(name="【專武】" + z['n'], value=z['d'], inline=False)
                 for y in cfg.MAccessory:
+                    if 'の絆' in y['n']:
+                        continue
                     if y['rmid'] == x['rmid']:
                         myembed.add_field(name="【專飾品】" + y['n'], value=y['d'], inline=False)
                 
