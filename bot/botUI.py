@@ -409,7 +409,7 @@ async def publicUI(message,bot):
         list_num = 1
         page_num = 1
         myembed = discord.Embed(title='技能搜索結果', description='關鍵字:' + kw_dis, color=10181046)
-        myembed.set_footer(text=nickname + "的請求")
+        myembed.set_footer(text='↓用箭頭翻頁。 '+nickname + "的請求")
         #不重複結果
         norepeated=[]            
         for x in cfg.MSkills:
