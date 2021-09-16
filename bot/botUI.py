@@ -716,7 +716,7 @@ async def publicUI(message,bot):
         rmid_list = []
         
         for x in cfg.MMonsters:
-            if isinor(keyword,str(x['id'])[1:4]+x['n']) and x['ce'] == x['me']:
+            if isinand(keyword,str(x['id'])[1:4]+x['n']) and x['ce'] == x['me']:
                 myembed = discord.Embed(title='角色搜索結果', description='關鍵字:' + kw_dis, color=10181046)
                 myembed.set_footer(text=nickname + "的請求")
                 for y in cfg.MSkills:
