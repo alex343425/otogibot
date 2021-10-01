@@ -29,7 +29,7 @@ def matchnick(kw):
     kw_list = []
     for x in cfg.nickname:
         if nickisin(kw,x['name_cn']):
-            kw_list.append(x['id'])
+            kw_list.append(str(x['id']))
     if kw_list == []:
         kw_list = 0
     return(kw_list)
