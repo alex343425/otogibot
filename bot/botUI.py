@@ -702,9 +702,11 @@ async def publicUI(message,bot):
             await message.channel.send('格式錯誤 請仔細閱讀' + cfg.addresshelpdoc)
             return
       
+        nick_list=[]
+        
         if message.content.lower().startswith('?nick'):
-            keyword = matchnick(keyword)
-            if keyword == 0:
+            nick_list = matchnick(keyword)
+            if nick_list == 0:
                 await message.channel.send('沒有找到任何結果')
                 return
         
@@ -716,7 +718,7 @@ async def publicUI(message,bot):
         rmid_list = []
         
         for x in cfg.MMonsters:
-            if isinand(keyword,str(x['id'])[1:4]+x['n']) and x['ce'] == x['me']:
+            if ( isinand(keyword,str(x['id'])[1:4]+x['n'])  or x['id'] in nick_list ) and x['ce'] == x['me']:
                 myembed = discord.Embed(title='角色搜索結果', description='關鍵字:' + kw_dis, color=10181046)
                 myembed.set_footer(text=nickname + "的請求")
                 for y in cfg.MSkills:
