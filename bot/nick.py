@@ -3,7 +3,6 @@ import requests
 
 def loadnick():
     try:
-    try:
         url = 'https://api.jsonbin.io/b/60ccca018a4cd025b7a05805/latest'
         request = requests.get(url)
         cfg.nickname = request.json()
