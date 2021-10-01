@@ -704,11 +704,11 @@ async def publicUI(message,bot):
       
         nick_list=[]
         
-        if message.content.lower().startswith('?nick'):
+        if message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick'):
             nick_list = matchnick(keyword)
-            if nick_list == 0:
-                await message.channel.send('沒有找到任何結果')
-                return
+            #if nick_list == 0:
+                #await message.channel.send('沒有找到任何結果')
+                #return
         
         kw_dis = ''
         for k in keyword:
