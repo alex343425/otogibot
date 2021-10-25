@@ -2,7 +2,7 @@ import cfg
 import requests
 from idparse import weaponclass, attribute
 from operator import itemgetter
-'''
+
 addressS = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MSkills.json'
 addressM = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MMonsters.json'
 addressR = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MSpirits.json'
@@ -10,14 +10,14 @@ addressW = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/M
 addressA = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MAccessory.json'
 addressI = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MItems.json'
 addressF = 'https://otogimigwestsp.blob.core.windows.net/prodassets/MasterData/MFoods.json'
-'''
-addressS = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MSkills.json'
-addressM = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MMonsters.json'
-addressR = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MSpirits.json'
-addressW = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MWeapons.json'
-addressA = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MAccessory.json'
-addressI = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MItems.json'
-addressF = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MFoods.json'
+
+addressStw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MSkills.json'
+addressMtw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MMonsters.json'
+addressRtw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MSpirits.json'
+addressWtw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MWeapons.json'
+addressAtw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MAccessory.json'
+addressItw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MItems.json'
+addressFtw = 'https://otogi-cdn-dmm-tw.azureedge.net/prod/MasterData/MFoods.json'
 
 
 def check_cate(rsid,xid,l,ml):
