@@ -3,6 +3,13 @@ MMonsters = []
 MWeapons = []
 MAccessory = []
 MSpirits = []
+
+MSkills_tw = []
+MMonsters_tw = []
+MWeapons_tw = []
+MAccessory_tw = []
+MSpirits_tw = []
+
 nickname = []
 spjson = []
 

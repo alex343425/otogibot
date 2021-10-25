@@ -4,7 +4,7 @@ import asyncio
 from botUI import utilityUI, funUI, privateUI, publicUI
 from checkupdate import checkupdate
 from nick import loadnick, loadsp
-from parseskills import skillsourcecate, updatemfiles
+from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix="!")
@@ -53,6 +53,7 @@ loadnick()
 loadsp()
 updatemfiles()
 skillsourcecate()
+skillsourcecate_tw()
 
 @bot.event
 async def on_ready():
@@ -84,7 +85,7 @@ async def on_message(message):
         await privateUI(message,bot)
         return
     
-    if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('？skill') or message.content.startswith('?story') or message.content.startswith('?event'):
+    if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('？skill') or message.content.startswith('?story') or message.content.startswith('?event') or message.content.startswith('?skitw'):
         await publicUI(message,bot)
         return
 

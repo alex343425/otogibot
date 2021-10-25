@@ -244,6 +244,7 @@ async def privateUI(message,bot):
         await message.channel.send('Updating...')
         updatemfiles()
         skillsourcecate()
+        skillsourcecate_tw()
         await message.channel.send('Updated.')
         return
         
@@ -389,7 +390,7 @@ async def privateUI(message,bot):
 
 async def publicUI(message,bot):
     nickname = message.author.name
-    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill'):
+    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill') or message.content.startswith('?skitw'):
         keyword = message.content.split(' ')
         n = len(keyword)
         keyword[0] = keyword[0].replace('？','?')
@@ -411,7 +412,15 @@ async def publicUI(message,bot):
         myembed = discord.Embed(title='技能搜索結果', description='關鍵字:' + kw_dis, color=10181046)
         myembed.set_footer(text='↓用箭頭翻頁。 '+nickname + "的請求")
         #不重複結果
-        norepeated=[]            
+        
+        skill_for_search=[]
+        if message.content.startswith('?skitw'):
+            skill_for_search = cfg.MSkills_tw
+        else:
+            skill_for_search = cfg.MSkills
+        
+        
+        norepeated=[]
         for x in cfg.MSkills:
             if x['l'] != x['ml']:
                 continue
@@ -526,7 +535,8 @@ async def publicUI(message,bot):
                     pass
                 else:
                     continue
-                    
+            
+            
             if 'f' in cate:
                 search_result = isinforward(keyword,x['d'])
             elif 'g' in cate:
