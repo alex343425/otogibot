@@ -757,7 +757,7 @@ async def publicUI(message,bot):
                             myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']), value=y['d'], inline=False)
                 for y in weapons_for_search:
                     if y['rmid'] == x['rmid']:
-                        for z in cfg.MSkills:
+                        for z in skill_for_search:
                             if z['rsid'] == y['msid']:
                                 myembed.add_field(name="【專武】" + z['n'], value=z['d'], inline=False)
                 for y in accessory_for_search:
