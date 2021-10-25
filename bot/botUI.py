@@ -390,7 +390,7 @@ async def privateUI(message,bot):
 
 async def publicUI(message,bot):
     nickname = message.author.name
-    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill') or message.content.startswith('?skitw'):
+    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill') or message.content.startswith('?skitw') or message.content.startswith('？skitw'):
         keyword = message.content.split(' ')
         n = len(keyword)
         keyword[0] = keyword[0].replace('？','?')
@@ -727,25 +727,40 @@ async def publicUI(message,bot):
         embed_list = []
         rmid_list = []
         
-        for x in cfg.MMonsters:
+        monsters_for_search=[]
+        skill_for_search=[]
+        weapons_for_search=[]
+        accessory_for_search=[]
+        if message.content.lower().startswith('?chartw'):
+            monsters_for_search = cfg.MMonsters_tw
+            skill_for_search = cfg.MSkills_tw
+            weapons_for_search = cfg.MWeapons_tw
+            accessory_for_search = cfg.MAccessory_tw
+        else:
+            monsters_for_search = cfg.MMonsters
+            skill_for_search = cfg.MSkills
+            weapons_for_search = cfg.MWeapons
+            accessory_for_search = cfg.MAccessory
+        
+        for x in monsters_for_search:
             if ( isinand(keyword,str(x['id'])[1:4]+x['n'])  or str(x['id']) in nick_list ) and x['ce'] == x['me']:
                 myembed = discord.Embed(title='角色搜索結果', description='關鍵字:' + kw_dis, color=10181046)
                 myembed.set_footer(text=nickname + "的請求")
-                for y in cfg.MSkills:
+                for y in skill_for_search:
                     if y['rsid'] == x['lsid']:
                         myembed.add_field(name="【隊長技】" + y['n'], value=y['d'], inline=False)
                         break
                 
-                for y in cfg.MSkills:
+                for y in skill_for_search:
                     if y['rsid'] == x['vsid']:
                         if y['l'] == y['ml'] and y['d'] != '':
                             myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']), value=y['d'], inline=False)
-                for y in cfg.MWeapons:
+                for y in weapons_for_search:
                     if y['rmid'] == x['rmid']:
                         for z in cfg.MSkills:
                             if z['rsid'] == y['msid']:
                                 myembed.add_field(name="【專武】" + z['n'], value=z['d'], inline=False)
-                for y in cfg.MAccessory:
+                for y in accessory_for_search:
                     if 'の絆' in y['n']:
                         continue
                     if y['rmid'] == x['rmid']:
