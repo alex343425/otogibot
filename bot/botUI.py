@@ -421,7 +421,7 @@ async def publicUI(message,bot):
         
         
         norepeated=[]
-        for x in cfg.MSkills:
+        for x in skill_for_search:
             if x['l'] != x['ml']:
                 continue
   
