@@ -39,6 +39,8 @@ privateUICommandList = {'?getcg',
 
 publicUICommandList = {'?char',
                        '？char',
+                       '?chartw',
+                       '？chartw',
                        '?nick',
                        '？nick',
                        '?spirit',
