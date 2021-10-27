@@ -54,6 +54,7 @@ async def checkupdate(bot):
     reminder_channel = bot.get_channel(626708913257185280)
     reminder_channel_alt = bot.get_channel(624974729689694230)
     private_chat_channel = bot.get_channel(820282343247183882)
+    be_update_channel = bot.get_channel(902930492683325440)
     debug_channel = bot.get_channel(855880392045363230)
     while True:
         if failure == 1:
@@ -85,7 +86,7 @@ async def checkupdate(bot):
                                     text = '競技場第一名成績上升,ID為: **'+str(x["UUserId"])+'**'
                                 else:
                                     break
-                                await private_chat_channel.send(text)
+                                await be_update_channel.send(text)
                                 for i in range(0,5):
                                     flag = 0
                                     url_inspect = 'https://api-pc.otogi-frontier.com/api/UFriend/Deck/'+str(x["UUserId"])+'/'+str(i)
@@ -163,10 +164,10 @@ async def checkupdate(bot):
                                         img_message = await image_channel.send(file=picture)
                                         myembed.set_image(url=img_message.attachments[0].url)
                                         try:
-                                            await private_chat_channel.send(embed=myembed)
+                                            await be_update_channel.send(embed=myembed)
                                             break
                                         except:
-                                            await private_chat_channel.send('錯誤 請回報BUG')
+                                            await be_update_channel.send('錯誤 請回報BUG')
                                     except:
                                         pass
                                 break
