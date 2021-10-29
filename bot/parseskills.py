@@ -429,8 +429,11 @@ def updatemfiles():
     cfg.MSpirits = requests.get(addressR).json()
     cfg.MWeapons = requests.get(addressW).json()
     cfg.MAccessory = requests.get(addressA).json()
-    cfg.MSkills_tw = requests.get(addressS_tw).json()
-    cfg.MMonsters_tw = requests.get(addressM_tw).json()
-    cfg.MSpirits_tw = requests.get(addressR_tw).json()
-    cfg.MWeapons_tw = requests.get(addressW_tw).json()
-    cfg.MAccessory_tw = requests.get(addressA_tw).json()
+    try:
+        cfg.MSkills_tw = requests.get(addressS_tw).json()
+        cfg.MMonsters_tw = requests.get(addressM_tw).json()
+        cfg.MSpirits_tw = requests.get(addressR_tw).json()
+        cfg.MWeapons_tw = requests.get(addressW_tw).json()
+        cfg.MAccessory_tw = requests.get(addressA_tw).json()
+    except:
+        pass

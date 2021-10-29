@@ -243,8 +243,11 @@ async def privateUI(message,bot):
     if message.content.lower().startswith('?update'):
         await message.channel.send('Updating...')
         updatemfiles()
+        await message.channel.send('檔案讀取完成')
         skillsourcecate()
+        await message.channel.send('日版技能整理完成')
         skillsourcecate_tw()
+        await message.channel.send('台版技能整理完成')
         await message.channel.send('Updated.')
         return
         
