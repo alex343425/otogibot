@@ -5,7 +5,7 @@ import cfg
 from nick import matchnick, loadnick, loadsp
 from idparse import check_sc, check_sa, isinforward, isinor, isinbackward, isindamage, isininterval, isinand, setskilltype, skillclass, weaponclass, skillrank, attribute
 from cgunity import cg_extract
-from parseskills import skillsourcecate, updatemfiles
+from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from PIL import Image
 from io import BytesIO
 
