@@ -115,14 +115,22 @@ def isinand(kw,sentence):
 
 def isinforward(kw,sentence):
     n = 0
+    first = 0    
     for k in kw:
         if k.startswith('-'):
             if sentence.lower().find(k[1:],n) != -1:
-                return False
+                return False        
+        elif k.startswith('*'):
+            sub = sentence.lower()[first:n]
+            print(sub)
+            if '。' in sub or '・' in sub:
+                return False        
         else:
             n = sentence.lower().find(k,n)+1
             if n == 0:
                 return False
+            if first ==0:
+                first = n
     return True
 
 def isinbackward(kw,sentence):
