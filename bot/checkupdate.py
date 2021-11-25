@@ -38,6 +38,12 @@ async def checkupdate(bot):
         maint_img = await get_img('https://otogimigwestsp.blob.core.windows.net/static/pc/maintenance/maintenance.png')
         ranking = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
         foobaa_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
+        ollumi_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/843672', headers={'token': cfg.token_jp}).json()["Level"]
+        sack_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/99142', headers={'token': cfg.token_jp}).json()["Level"]
+        Be_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/61640', headers={'token': cfg.token_jp}).json()["Level"]
+        Scarlet_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/835519', headers={'token': cfg.token_jp}).json()["Level"]
+        Kirby_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
+        bu_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
         failure = 0
     except:
         await starting_channel.send('獲取公告失敗')
@@ -53,7 +59,7 @@ async def checkupdate(bot):
     await starting_channel.send('Bot initiated.')
     reminder_channel = bot.get_channel(626708913257185280)
     reminder_channel_alt = bot.get_channel(624974729689694230)
-    private_chat_channel = bot.get_channel(820282343247183882)
+    private_chat_channel = bot.get_channel(913303883273625620)
     be_update_channel = bot.get_channel(902930492683325440)
     debug_channel = bot.get_channel(855880392045363230)
     while True:
@@ -66,6 +72,12 @@ async def checkupdate(bot):
             try:
                 ranking_check = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
                 foobaa_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
+                ollumi_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/843672', headers={'token': cfg.token_jp}).json()["Level"]
+                sack_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/99142', headers={'token': cfg.token_jp}).json()["Level"]
+                Be_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/61640', headers={'token': cfg.token_jp}).json()["Level"]
+                Scarlet_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/835519', headers={'token': cfg.token_jp}).json()["Level"]
+                Kirby_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
+                bu_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
             except:
                 continue
             try:
@@ -73,6 +85,30 @@ async def checkupdate(bot):
                     text = 'foobaa等級變動.由' + str(foobaa_level) + '升為' + str(foobaa_level_check) + '.'
                     await private_chat_channel.send(text)
                     foobaa_level = foobaa_level_check
+                if ollumi_level_check > ollumi_level:
+                    text = 'ollumi等級變動.由' + str(ollumi_level) + '升為' + str(ollumi_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    ollumi_level = ollumi_level_check
+                if sack_level_check > sack_level:
+                    text = 'sack(海苔)等級變動.由' + str(sack_level) + '升為' + str(sack_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    sack_level = sack_level_check
+                if Be_level_check > Be_level:
+                    text = 'Be等級變動.由' + str(Be_level) + '升為' + str(Be_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    Be_level = Be_level_check
+                if Scarlet_level_check > Scarlet_level:
+                    text = 'Scarlet等級變動.由' + str(Scarlet_level) + '升為' + str(Scarlet_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    Scarlet_level = Scarlet_level_check
+                if Kirby_level_check > Kirby_level:
+                    text = 'Kirby等級變動.由' + str(Kirby_level) + '升為' + str(Kirby_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    Kirby_level = Kirby_level_check
+                if bu_level_check > bu_level:
+                    text = '村人521954等級變動.由' + str(bu_level) + '升為' + str(bu_level_check) + '.'
+                    await private_chat_channel.send(text)
+                    bu_level = bu_level_check
             except:
                 await debug_channel.send('等級探針出現bug.')
             try:
