@@ -47,8 +47,10 @@ publicUICommandList = {'?char',
                        '？spirit',
                        '?be',
                        '？be',
+                       '?betw',
+                       '？betw',
                        '!story',
-                       '!event'
+                       '!event'                       
                        }
 
 loadnick()

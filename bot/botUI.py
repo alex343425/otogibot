@@ -982,12 +982,22 @@ async def publicUI(message,bot):
         return
     
     if message.content.lower().startswith('?be') or message.content.lower().startswith('？be'):
-        try:
-            url = 'https://api-pc.otogi-frontier.com/api/Events/17001/ranking/'
-            response = requests.get(url, headers={'token': cfg.token_jp})
-        except:
-            await message.channel.send('找不到相應信息')
-            return
+        if 'tw' in message.content.lower():
+            try:
+                url = 'https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/'
+                response = requests.get(url, headers={'token': cfg.token_cn})
+            except:
+                await message.channel.send('找不到相應信息')
+                return
+            
+        else:
+            try:
+                url = 'https://api-pc.otogi-frontier.com/api/Events/17001/ranking/'
+                response = requests.get(url, headers={'token': cfg.token_jp})
+            except:
+                await message.channel.send('找不到相應信息')
+                return
+            
         title = response.json()["ThisWeekQuestName"]
         ranking = response.json()["ThisWeekTopPlayers"]
         text_jp_1 = ''
