@@ -1031,6 +1031,32 @@ async def publicUI(message,bot):
         except:
             await message.channel.send('錯誤 請回報BUG')
         return
+    if message.content.lower().startswith('?卡池') or message.content.lower().startswith('？卡池') :
+        await message.channel.send('正在獲取資訊...')
+        url = 'https://api-pc.otogi-frontier.com/api/UGachas/'
+        r = requests.get(url,headers={'token': cfg.token_jp}).json()['AvailableGachas']
+        l=[]
+        for x in r:
+            if x['Tabs'] == 2:
+                l.append(x)
+        result = ''
+        for x in l:    
+            r2 = requests.get(url+str(x['Id']),headers={'token': cfg.token_jp}).json()
+            result += '卡池名：' + r2['Name']+'\nPU角:'
+            for y in r2['DisplayItems']:
+                y=y['ItemId']
+                for z in cfg.spjson:
+                    if int(z['id']) == y:
+                        result += z['name_jp']+'('+z['classify']+') '
+                        break
+            result +='\n'
+        try:
+            await message.channel.send(result)
+        except:
+            await message.channel.send('錯誤 請回報BUG')
+        return
+        
+        
     
     if message.content.lower().startswith('?story'):
         try:
