@@ -717,7 +717,7 @@ async def publicUI(message,bot):
       
         nick_list=[]
         
-        if message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick'):
+        if message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick') or message.content.lower().startswith('?nicktw') or message.content.lower().startswith('？nicktw'):
             nick_list = matchnick(keyword)
             if nick_list == 0:
                 await message.channel.send('沒有找到任何結果')
