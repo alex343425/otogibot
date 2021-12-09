@@ -734,7 +734,7 @@ async def publicUI(message,bot):
         skill_for_search=[]
         weapons_for_search=[]
         accessory_for_search=[]
-        if message.content.lower().startswith('?chartw'):
+        if 'tw' in message.content.lower().split(' ')[0]:
             monsters_for_search = cfg.MMonsters_tw
             skill_for_search = cfg.MSkills_tw
             weapons_for_search = cfg.MWeapons_tw
