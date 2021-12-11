@@ -425,7 +425,7 @@ async def publicUI(message,bot):
         
         norepeated=[]
         for x in skill_for_search:
-            if x['l'] != x['ml']:
+            if x['l'] != x['ml'] and x['ml']<=6:
                 continue
   
             count = 1
