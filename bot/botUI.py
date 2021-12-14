@@ -281,7 +281,56 @@ async def privateUI(message,bot):
                 common_quest += '\n' + quest_dis['Missions'][1]['Name']
             if '一人も倒' in quest_dis['Missions'][2]['Name'] or 'ターン' in quest_dis['Missions'][2]['Name']:
                 common_quest += '\n' + quest_dis['Missions'][2]['Name']
-  
+            sentence = quest_dis['Missions'][0]['Name']
+            i = 1
+            if '以外' in sentence:
+                if '属性' in sentence:
+                    for x in '火水樹光闇':
+                        if x in sentence:
+                            pass
+                        else:
+                            canvas.paste(red_mark,(1+space*i,1+space*j))
+                        i += 1
+                else:
+                    pass
+                i = 6
+                if '属性' in sentence:
+                    pass
+                else:
+                    for x in '剣斧槍本杖短弓特':
+                        if x == '剣':
+                            n = sentence.find('剣')
+                            if n == -1:
+                                canvas.paste(red_mark,(1+space*i,1+space*j))
+                            else:
+                                pass
+                        else:
+                            if x in sentence:
+                                pass
+                            else:
+                                canvas.paste(red_mark,(1+space*i,1+space*j))
+                        i += 1
+            else:
+                for x in '火水樹光闇':
+                    if x in sentence:
+                        canvas.paste(red_mark,(1+space*i,1+space*j))
+                    else:
+                        pass
+                    i += 1
+                i = 6
+                for x in '剣斧槍本杖短弓特':
+                    if x == '剣':
+                        n = sentence.find('剣')
+                        if n == -1 or (n != -1 and sentence[n-1] == '短'):
+                            pass
+                        else:
+                            canvas.paste(red_mark,(1+space*i,1+space*j))
+                    else:
+                        if x in sentence:
+                            canvas.paste(red_mark,(1+space*i,1+space*j))
+                        else:
+                            pass
+                    i += 1
             sentence = quest_dis['Missions'][1]['Name']
             i = 1
             if '以外' in sentence:
