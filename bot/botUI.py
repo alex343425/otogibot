@@ -820,7 +820,7 @@ async def publicUI(message,bot):
                 
                 
                 sp_classify=''
-                for y in in cfg.spjson:
+                for y in cfg.spjson:
                     if str(x['rmid']) == str(y['id']):
                         sp_classify='('+y['classify']+')'
                         break
