@@ -822,10 +822,10 @@ async def publicUI(message,bot):
                 sp_classify=''
                 for y in cfg.spjson:
                     if str(x['rmid']) == str(y['id']):
-                        sp_classify='('+y['classify']+')'
+                        sp_classify='('+y['classify']+') '
                         break
                         
-                name_dis = '(' + str(x['rmid']) + sp_classify+ x['n'] + ':' + str(x['r']) + '星'
+                name_dis = '(' + str(x['rmid']) +')'+ sp_classify+ x['n'] + ':' + str(x['r']) + '星'
                 name_dis += attribute(x['a']) + weaponclass(x['wc']) + '  技能格子:'
                 name_dis += skillclass(x['sc1']) + skillrank(x['sr1'])
                 name_dis += skillclass(x['sc2']) + skillrank(x['sr2'])
