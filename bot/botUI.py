@@ -818,7 +818,14 @@ async def publicUI(message,bot):
                     if y['rmid'] == x['rmid']:
                         myembed.add_field(name="【專飾品】" + y['n'], value=y['d'], inline=False)
                 
-                name_dis = '(' + str(x['rmid']) + ')' + x['n'] + ':' + str(x['r']) + '星'
+                
+                sp_classify=''
+                for y in in cfg.spjson:
+                    if str(x['rmid']) == str(y['id']):
+                        sp_classify='('+y['classify']+')'
+                        break
+                        
+                name_dis = '(' + str(x['rmid']) + sp_classify+ x['n'] + ':' + str(x['r']) + '星'
                 name_dis += attribute(x['a']) + weaponclass(x['wc']) + '  技能格子:'
                 name_dis += skillclass(x['sc1']) + skillrank(x['sr1'])
                 name_dis += skillclass(x['sc2']) + skillrank(x['sr2'])
