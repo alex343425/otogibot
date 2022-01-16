@@ -1544,19 +1544,26 @@ async def publicUI_kirby(message,bot):
     #nickname = message.author.name
     urltw = 'https://otogi-traffic-dmm-tw.trafficmanager.net/api/MScenes/'
     num=400011
-    r = requests.get(urltw+str(num), headers = {'token': cfg.token_cn}).json()
-    if r['MSceneDetails'][0]['Phrase'] == 'いったたた……みんな、大丈夫！？':
-        result='深層劇情：未翻譯\n'
-    else:
-        result='深層劇情：已翻譯\n'
+    try:
+        r = requests.get(urltw+str(num), headers = {'token': cfg.token_cn}).json()
+        if r['MSceneDetails'][0]['Phrase'] == 'いったたた……みんな、大丈夫！？':
+            result='深層劇情：未翻譯\n'
+        else:
+            result='深層劇情：已翻譯\n'
+    except:
+        result='讀取錯誤'
     
     url_event='https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/'
     num='16001'
-    r = requests.get(url_event+str(num), headers = {'token': cfg.token_cn}).json()
-    if r == None:
-        result+='深層活動id：未發現'
-    else:
-        result+='深層活動id：已更新'
+    try:    
+        r = requests.get(url_event+str(num), headers = {'token': cfg.token_cn}).json()
+        if r == None:
+            result+='深層活動id：未發現'
+        else:
+            result+='深層活動id：已更新'
+    except:
+        pass
+    
     try:
         await message.channel.send(result)
     except:
