@@ -1098,12 +1098,14 @@ async def publicUI(message,bot):
         result = ''
         for x in l:    
             r2 = requests.get(url+str(x['Id']),headers={'token': cfg.token_jp}).json()
-            result += '卡池名：' + r2['Name']+'\nPU角:'
+            result += '卡池名：' + r2['Name']+'\nPU角： '
+            i=0
             for y in r2['DisplayItems']:
                 y=y['ItemId']
                 for z in cfg.spjson:
                     if int(z['id']) == y:
-                        result += z['name_jp']+'('+z['classify']+') '
+                        result += '('+str(i)+')'+z['name_jp']+'('+z['classify']+')\n'
+                        i+=1
                         break
             result +='\n'
         try:
@@ -1536,4 +1538,27 @@ async def publicUI(message,bot):
                         await message.channel.send('錯誤 請回報BUG')
                         return
         return 
+    return
+
+async def publicUI_kirby(message,bot):
+    #nickname = message.author.name
+    urltw = 'https://otogi-traffic-dmm-tw.trafficmanager.net/api/MScenes/'
+    num=400011
+    r = requests.get(urltw+str(num), headers = {'token': cfg.token_cn}).json()
+    if r['MSceneDetails'][0]['Phrase'] == 'いったたた……みんな、大丈夫！？':
+        result='深層劇情：未翻譯\n'
+    else:
+        result='深層劇情：已翻譯\n'
+    
+    url_event='https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/'
+    num='16001'
+    r = requests.get(url_event+str(num), headers = {'token': cfg.token_cn}).json()
+    if r == None:
+        result+='深層活動id：未發現'
+    else:
+        result+='深層活動id：已更新'
+    try:
+        await message.channel.send(result)
+    except:
+        await message.channel.send('錯誤 請回報BUG')
     return

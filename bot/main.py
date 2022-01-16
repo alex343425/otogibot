@@ -1,7 +1,7 @@
 import os
 import discord
 import asyncio
-from botUI import utilityUI, funUI, privateUI, publicUI
+from botUI import utilityUI, funUI, privateUI, publicUI , publicUI_kirby
 from checkupdate import checkupdate
 from nick import loadnick, loadsp
 from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
@@ -56,6 +56,10 @@ publicUICommandList = {'?char',
                        '!story',
                        '!event'                       
                        }
+publicUICommandList_kirby={'?深層',
+                           '？深層'
+    
+    }
 
 loadnick()
 loadsp()
@@ -95,6 +99,10 @@ async def on_message(message):
     
     if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('？skill') or message.content.startswith('?story') or message.content.startswith('?event') or message.content.startswith('?skitw') or message.content.startswith('？skitw'):
         await publicUI(message,bot)
+        return
+    
+    if message.content.split(' ')[0] in publicUICommandList_kirby:
+        await publicUI_kirby(message,bot)
         return
 
 if __name__ == "__main__":
