@@ -1098,8 +1098,8 @@ async def publicUI(message,bot):
         result = ''
         for x in l:    
             r2 = requests.get(url+str(x['Id']),headers={'token': cfg.token_jp}).json()
-            result += '卡池名：' + r2['Name']+'\nPU角： '
-            i=0
+            result += '卡池名：' + r2['Name']+'\nPU角：\n'
+            i=1
             for y in r2['DisplayItems']:
                 y=y['ItemId']
                 for z in cfg.spjson:
