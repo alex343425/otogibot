@@ -422,6 +422,24 @@ def skillsourcecate():
         if x['tm'] == 9999999:
             x['tm']=0
     
+    
+    #another_skill
+    cfg.another_skill[653] = 26445 #二部白雪  
+    
+    cfg.another_skill[823] = 17255 #四周年看板
+    cfg.another_skill[824] = 26905 #四周年貓
+    cfg.another_skill[827] = 17205 #四周年帽
+    cfg.another_skill[828] = 26855 #四周年灰
+    cfg.another_skill[829] = 36485 #四周年桃
+    cfg.another_skill[830] = 26955 #四周年艾蜜莉
+    cfg.another_skill[831] = 17305 #四周年克
+    cfg.another_skill[832] = 400095 #四周年汀
+    
+    cfg.another_skill[880] = 100265 #正月帽
+    cfg.another_skill[881] = 400285 #正月灰
+    cfg.another_skill[882] = 27865 #正月桃
+    cfg.another_skill[883] = 37035 #正月汀
+    
 
 def updatemfiles():
     cfg.MSkills = requests.get(addressS).json()

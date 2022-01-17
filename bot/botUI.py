@@ -807,6 +807,15 @@ async def publicUI(message,bot):
                     if y['rsid'] == x['vsid']:
                         if y['l'] == y['ml'] and y['d'] != '':
                             myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']), value=y['d'], inline=False)
+                            
+                if int(str(x['id'])[1:4]) in cfg.another_skill:
+                    i=cfg.another_skill[int(str(x['id'])[1:4])]
+                    for y in skill_for_search:
+                        if y['id'] == i:
+                            myembed.add_field(name="【Another Skill】" + y['n'], value=y['d'], inline=False)
+                            break
+                
+                
                 for y in weapons_for_search:
                     if y['rmid'] == x['rmid']:
                         for z in skill_for_search:

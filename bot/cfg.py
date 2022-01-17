@@ -13,6 +13,8 @@ MSpirits_tw = []
 nickname = []
 spjson = []
 
+another_skill={}
+
 token_jp = '8b00d233-168c-41fd-a4ac-500e3da7ef15'
 token_cn = '72ad8dd3-ec8d-44fd-aed0-bac980522fa6'
 url_jp = 'https://api-pc.otogi-frontier.com/api/MScenes/'
