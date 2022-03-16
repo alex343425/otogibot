@@ -35,7 +35,7 @@ async def checkupdate(bot):
     try:
         news_latest = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
         news_now = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
-        maint_img = await get_img('https://otogimigwestsp.blob.core.windows.net/static/pc/maintenance/maintenance.png')
+        maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/pc/maintenance/maintenance.png')
         ranking = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
         foobaa_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
         ollumi_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/843672', headers={'token': cfg.token_jp}).json()["Level"]
@@ -49,19 +49,23 @@ async def checkupdate(bot):
         await starting_channel.send('獲取公告失敗')
         failure = 1
     
-    [width, height] = size(maint_img)
-    img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
-    a_sum_old = 0
-    for x in array(ImageOps.grayscale(img_save)):
-        a_sum_old += sum(x)
-    
-    print("Logged in as {}({})".format(bot.user.name, bot.user.id))
-    await starting_channel.send('Bot initiated.')
-    reminder_channel = bot.get_channel(626708913257185280)
-    reminder_channel_alt = bot.get_channel(624974729689694230)
-    private_chat_channel = bot.get_channel(913303883273625620)
-    be_update_channel = bot.get_channel(902930492683325440)
-    debug_channel = bot.get_channel(855880392045363230)
+    try:
+        [width, height] = size(maint_img)
+        img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
+        a_sum_old = 0
+        for x in array(ImageOps.grayscale(img_save)):
+            a_sum_old += sum(x)
+        
+        print("Logged in as {}({})".format(bot.user.name, bot.user.id))
+        await starting_channel.send('Bot initiated.')
+        reminder_channel = bot.get_channel(626708913257185280)
+        reminder_channel_alt = bot.get_channel(624974729689694230)
+        private_chat_channel = bot.get_channel(913303883273625620)
+        be_update_channel = bot.get_channel(902930492683325440)
+        debug_channel = bot.get_channel(855880392045363230)
+    except:
+        await starting_channel.send('公告處理失敗')
+        failure = 1
     while True:
         if failure == 1:
             break
@@ -326,13 +330,14 @@ async def checkupdate(bot):
             if overall_check_mark == 1:
                 news_now = news_now_check
             try:
-                maint_img = await get_img('https://otogimigwestsp.blob.core.windows.net/static/pc/maintenance/maintenance.png')
+                maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/pc/maintenance/maintenance.png')
+                [width, height] = size(maint_img)
+                img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
+                a_sum_new = 0
             except:
                 await starting_channel.send('獲取維修圖片失敗')
                 continue
-            [width, height] = size(maint_img)
-            img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
-            a_sum_new = 0
+
             for x in array(ImageOps.grayscale(img_save)):
                 a_sum_new += sum(x)
             if a_sum_new == a_sum_old:
