@@ -30,6 +30,7 @@ def ch_number(i):
 
 async def checkupdate(bot):
     starting_channel = bot.get_channel(855880177224253440)
+    log_channel = bot.get_channel(630699387542306839)
     async def get_img(img_url):
         return Image.open(BytesIO(requests.get(img_url).content))
     try:
@@ -67,6 +68,7 @@ async def checkupdate(bot):
         await starting_channel.send('公告處理失敗')
         failure = 1
     while True:
+        log_channel.send('存活確認')
         if failure == 1:
             break
         await asyncio.sleep(30)
@@ -83,7 +85,7 @@ async def checkupdate(bot):
                 Kirby_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
                 bu_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
             except:
-                continue
+                pass
             try:
                 if foobaa_level_check > foobaa_level:
                     text = 'foobaa等級變動.由' + str(foobaa_level) + '升為' + str(foobaa_level_check) + '.'
