@@ -68,7 +68,7 @@ async def checkupdate(bot):
         await starting_channel.send('公告處理失敗')
         failure = 1
     while True:
-        log_channel.send('存活確認')
+        await log_channel.send('存活確認')
         if failure == 1:
             break
         await asyncio.sleep(30)
