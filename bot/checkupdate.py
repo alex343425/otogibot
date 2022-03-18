@@ -67,6 +67,7 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('公告處理失敗')
         failure = 1
+    return
     while True:
         await log_channel.send('存活確認')
         if failure == 1:
