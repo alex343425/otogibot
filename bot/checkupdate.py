@@ -69,11 +69,11 @@ async def checkupdate(bot):
         failure = 1
     return
     while True:
-        await log_channel.send('存活確認')
         if failure == 1:
             break
         await asyncio.sleep(30)
         current_time = str(datetime.datetime.now()).split(' ')
+        '''
         if current_time[1][3:5] in ['03','08','13','18','23','28','33','38','43','48','53','58']:
             await asyncio.sleep(30)
             try:
@@ -247,7 +247,7 @@ async def checkupdate(bot):
                             pass
             except:
                 ranking = ranking_check
-                
+        '''
         if current_time[1][3:5] in ['00','30']:
             await asyncio.sleep(30)
             try:
@@ -315,7 +315,8 @@ async def checkupdate(bot):
                         break
                 if check_mark == 0:
                     overall_check_mark = 1
-                    img_url = 'https://otogimigwest.blob.core.windows.net/static/pc/Banner/Info/' + x['ImagePath'] + '?458'
+                    
+                    img_url = 'https://cos-web-assets.otogi-frontier.com/static/pc/Banner/Info/' + x['ImagePath']
                     try:
                         img = await get_img(img_url)
                         img.save('news.png')
