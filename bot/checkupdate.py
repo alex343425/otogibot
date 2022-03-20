@@ -258,6 +258,17 @@ async def checkupdate(bot):
                 continue
             count = 0
             overall_check_mark = 0
+            
+            ##################
+            temp_str=''
+            for x in news_latest_check:
+                temp_str+=str(x['Id'])+' '
+                count+=1
+                if count == 10:
+                    break
+            log_channel.send(temp_str+'\n'+str(datetime.datetime.now()))                        
+            ##################
+            count = 0
             for x in news_latest_check:
                 check_mark = 0
                 for y in news_latest:
