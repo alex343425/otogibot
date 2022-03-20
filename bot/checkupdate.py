@@ -265,7 +265,7 @@ async def checkupdate(bot):
                 count+=1
                 if count == 10:
                     break
-            log_channel.send(temp_str+'\n'+str(datetime.datetime.now()))                        
+            await log_channel.send(temp_str+'\n'+str(datetime.datetime.now()))                        
             ##################
             count = 0
             for x in news_latest_check:
