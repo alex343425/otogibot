@@ -317,6 +317,7 @@ async def checkupdate(bot):
                 news_latest = news_latest_check
             overall_check_mark = 0
             news_i = 1
+            '''
             for x in news_now_check:
                 check_mark = 0
                 for y in news_now:
@@ -364,3 +365,4 @@ async def checkupdate(bot):
                 myembed.set_author(name="維修公告", icon_url=cfg.icon_url)
                 myembed.set_image(url="attachment://news.png")
                 await reminder_channel_alt.send(file=file, embed=myembed)
+            '''
