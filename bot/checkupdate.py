@@ -67,6 +67,7 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('公告處理失敗')
         failure = 1
+    return
     while True:
         if failure == 1:
             break
