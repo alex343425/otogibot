@@ -32,7 +32,7 @@ def check_cate_tw(rsid,xid,l,ml):
             if y['lsid'] == rsid:
                 spname = 'SP未知'
                 for spindex in cfg.spjson:
-                    if str(y['id']) == spindex['id']:
+                    if str(y['id']) == str(spindex['id']):
                         spname = spindex['classify']
                         break
                 if y['r'] == 3:
@@ -49,7 +49,7 @@ def check_cate_tw(rsid,xid,l,ml):
                         if z['rmid'] == y['rmid']:
                             spname = 'SP未知'
                             for spindex in cfg.spjson:
-                                if str(z['id']) == spindex['id']:
+                                if str(z['id']) == str(spindex['id']):
                                     spname = spindex['classify']
                                     break
                             if z['r'] == 3:
@@ -67,7 +67,7 @@ def skillsourcecate_tw():
             continue
         spname = 'SP未知'
         for spindex in cfg.spjson:
-            if str(x['id']) == spindex['id']:
+            if str(x['id']) == str(spindex['id']):
                 spname = spindex['classify']
                 break
         if x['r'] == 3:
@@ -233,7 +233,7 @@ def check_cate(rsid,xid,l,ml):
             if y['lsid'] == rsid:
                 spname = 'SP未知'
                 for spindex in cfg.spjson:
-                    if str(y['id']) == spindex['id']:
+                    if str(y['id']) == str(spindex['id']):
                         spname = spindex['classify']
                         break
                 if y['r'] == 3:
@@ -250,7 +250,7 @@ def check_cate(rsid,xid,l,ml):
                         if z['rmid'] == y['rmid']:
                             spname = 'SP未知'
                             for spindex in cfg.spjson:
-                                if str(z['id']) == spindex['id']:
+                                if str(z['id']) == str(spindex['id']):
                                     spname = spindex['classify']
                                     break
                             if z['r'] == 3:
@@ -268,7 +268,7 @@ def skillsourcecate():
             continue
         spname = 'SP未知'
         for spindex in cfg.spjson:
-            if str(x['id']) == spindex['id']:
+            if str(x['id']) == str(spindex['id']):
                 spname = spindex['classify']
                 break
         if x['r'] == 3:
