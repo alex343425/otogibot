@@ -3,7 +3,7 @@ import requests
 
 def loadnick():
     try:
-        url = 'https://api.jsonbin.io/b/60ccca018a4cd025b7a05805/latest'
+        url = 'https://api.jsonbin.io/v3/b/60ccca018a4cd025b7a05805/latest'
         request = requests.get(url)
         cfg.nickname = request.json()
     except:
@@ -12,7 +12,7 @@ def loadnick():
 
 def loadsp():
     try:
-        url = 'https://api.jsonbin.io/b/60ccca018a4cd025b7a05805/latest'
+        url = 'https://api.jsonbin.io/v3/b/60ccca018a4cd025b7a05805/latest'
         request = requests.get(url)
         cfg.spjson = request.json()
     except:
