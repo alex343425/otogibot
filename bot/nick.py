@@ -3,18 +3,18 @@ import requests
 
 def loadnick():
     try:
-        url = 'https://api.jsonbin.io/v3/b/60ccca018a4cd025b7a05805/latest'
+        url = 'https://pastebin.com/raw/jmP3RNvY'
         request = requests.get(url)
-        cfg.nickname = request.json()['record']
+        cfg.nickname = request.json()
     except:
         pass
     return
 
 def loadsp():
     try:
-        url = 'https://api.jsonbin.io/v3/b/60ccca018a4cd025b7a05805/latest'
+        url = 'https://pastebin.com/raw/jmP3RNvY'
         request = requests.get(url)
-        cfg.spjson = request.json()['record']
+        cfg.spjson = request.json()
     except:
         pass
     return
