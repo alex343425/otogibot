@@ -618,7 +618,7 @@ async def publicUI(message,bot):
                 if result_list_display == False:
                     text_jp = '效果:' + x['d'] + '\n'
                 else:
-                    text_jp = ''
+                    text_jp = '.'
                 if skillsource > 0:
                     text_jp += '技能來源:' + sourcename + '\n'
                 skill_id_list.append(skillsource)
