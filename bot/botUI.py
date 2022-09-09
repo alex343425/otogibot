@@ -471,7 +471,10 @@ async def publicUI(message,bot):
         else:
             skill_for_search = cfg.MSkills
         
-        
+        result_list_display=False
+        if '*' in cate:
+            result_list_display = True
+            
         norepeated=[]
         for x in skill_for_search:
             if x['l'] != x['ml'] and x['ml']<=6:
@@ -587,7 +590,7 @@ async def publicUI(message,bot):
                     pass
                 else:
                     continue
-            
+
             
             if 'f' in cate:
                 search_result = isinforward(keyword,x['d'])
@@ -612,13 +615,16 @@ async def publicUI(message,bot):
             if search_result:
                 name_jp = str(list_num) + '.技能名:' + x['n'] + '【' + setskilltype(skillcate)
                 name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr']) 
-                text_jp = '效果:' + x['d'] + '\n'
+                if result_list_display == False:
+                    text_jp = '效果:' + x['d'] + '\n'
+                else:
+                    text_jp = ''
                 if skillsource > 0:
                     text_jp += '技能來源:' + sourcename + '\n'
                 skill_id_list.append(skillsource)
                 myembed.add_field(name=name_jp, value=text_jp, inline=False)
                 list_num += 1
-                if list_num == 6:
+                if list_num == (6+15*result_list_display):
                     list_num = 1
                     myembed.set_author(name='頁:' + str(page_num))
                     page_num += 1
