@@ -466,7 +466,7 @@ async def publicUI(message,bot):
         #不重複結果
         
         skill_for_search=[]
-        if message.content.startswith('?skitw'):
+        if message.content.startswith('?skitw') or message.content.startswith('？skitw'):
             skill_for_search = cfg.MSkills_tw
         else:
             skill_for_search = cfg.MSkills
