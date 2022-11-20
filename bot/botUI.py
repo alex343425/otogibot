@@ -801,7 +801,7 @@ async def publicUI(message,bot):
             accessory_for_search = cfg.MAccessory
         
         for x in monsters_for_search:
-            if ( isinand(keyword,str(x['id'])[1:4]+x['n'])  or str(x['id']) in nick_list ) and x['ce'] == x['me']:
+            if ( isinand(keyword,str(int(x['id'])//10-1000)+x['n']) or str(x['id']) in nick_list ) and x['ce'] == x['me']:
                 myembed = discord.Embed(title='角色搜索結果', description='關鍵字:' + kw_dis, color=10181046)
                 myembed.set_footer(text=nickname + "的請求")
                 for y in skill_for_search:
