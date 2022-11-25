@@ -1559,7 +1559,7 @@ async def publicUI(message,bot):
 async def publicUI_kirby(message,bot):
     nickname = message.author.name
     try:
-        ranking_check = requests.get('https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/', headers={'token': cfg.token_cn}).json()
+        ranking_check = requests.get('https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/', headers={'token': cfg.token_cn}).json()['ThisWeekTopPlayers']
     except:
         return
     result = ''
