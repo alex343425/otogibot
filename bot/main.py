@@ -56,8 +56,8 @@ publicUICommandList = {'?char',
                        '!story',
                        '!event'                       
                        }
-publicUICommandList_kirby={'?深層',
-                           '？深層'
+publicUICommandList_kirby={'!碳基打競技',
+                           '！碳基打競技'
     
     }
 

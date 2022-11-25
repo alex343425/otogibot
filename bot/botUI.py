@@ -8,6 +8,7 @@ from cgunity import cg_extract
 from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from PIL import Image
 from io import BytesIO
+from checkupdate import ch_number
 
 async def utilityUI(message,bot):
     if message.content.startswith('!ping'):
@@ -1556,31 +1557,18 @@ async def publicUI(message,bot):
     return
 
 async def publicUI_kirby(message,bot):
-    #nickname = message.author.name
-    urltw = 'https://otogi-traffic-dmm-tw.trafficmanager.net/api/MScenes/'
-    num=400011
+    nickname = message.author.name
     try:
-        r = requests.get(urltw+str(num), headers = {'token': cfg.token_cn}).json()
-        if r['MSceneDetails'][0]['Phrase'] == 'いったたた……みんな、大丈夫！？':
-            result='深層劇情：未翻譯\n'
-        else:
-            result='深層劇情：已翻譯\n'
+        ranking_check = requests.get('https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/', headers={'token': cfg.token_cn}).json()
     except:
-        result='讀取錯誤'
-    
-    url_event='https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/'
-    num='16001'
-    try:    
-        r = requests.get(url_event+str(num), headers = {'token': cfg.token_cn}).json()
-        if r == None:
-            result+='深層活動id：未發現'
-        else:
-            result+='深層活動id：已更新'
-    except:
-        pass
-    
+        return
+    result = ''
+    for x in ranking_check:
+        if x['UUserId'] == 149325:
+            result='碳基神目前排名第 '+x['Rank']+'\n分數是 '+ch_number(int(x['Score']))+'\n謝謝碳基神！'
+            break
     try:
         await message.channel.send(result)
     except:
-        await message.channel.send('錯誤 請回報BUG')
+        pass
     return
