@@ -1567,6 +1567,8 @@ async def publicUI_kirby(message,bot):
         if x['UUserId'] == 149325:
             result='碳基神目前排名第 '+str(x['Rank'])+'\n分數是 '+ch_number(int(x['Score']))+'\n謝謝碳基神！'
             break
+    if result == '':
+        return
     try:
         await message.channel.send(result)
     except:
