@@ -49,7 +49,10 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('獲取公告失敗')
         failure = 1
-    
+    ##############################
+    #測試
+    ##############################
+    news_now.pop(0)
     try:
         [width, height] = size(maint_img)
         img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
@@ -318,7 +321,7 @@ async def checkupdate(bot):
                 news_latest = news_latest_check
             overall_check_mark = 0
             news_i = 1
-            '''
+            
             for x in news_now_check:
                 check_mark = 0
                 for y in news_now:
@@ -328,7 +331,7 @@ async def checkupdate(bot):
                 if check_mark == 0:
                     overall_check_mark = 1
                     
-                    img_url = 'https://cos-web-assets.otogi-frontier.com/static/pc/Banner/Info/' + x['ImagePath']
+                    img_url = 'https://cos-web-assets.otogi-frontier.com/static/sp/Banner/Info/' + x['ImagePath']
                     try:
                         img = await get_img(img_url)
                         img.save('news.png')
@@ -346,7 +349,7 @@ async def checkupdate(bot):
             if overall_check_mark == 1:
                 news_now = news_now_check
             try:
-                maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/pc/maintenance/maintenance.png')
+                maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
                 [width, height] = size(maint_img)
                 img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
                 a_sum_new = 0
@@ -366,4 +369,4 @@ async def checkupdate(bot):
                 myembed.set_author(name="維修公告", icon_url=cfg.icon_url)
                 myembed.set_image(url="attachment://news.png")
                 await reminder_channel_alt.send(file=file, embed=myembed)
-            '''
+            
