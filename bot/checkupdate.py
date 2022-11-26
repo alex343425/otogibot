@@ -67,13 +67,13 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('公告處理失敗')
         failure = 1
-    return
+    
     while True:
         if failure == 1:
             break
         await asyncio.sleep(30)
         current_time = str(datetime.datetime.now()).split(' ')
-        '''
+        
         if current_time[1][3:5] in ['03','08','13','18','23','28','33','38','43','48','53','58']:
             await asyncio.sleep(30)
             try:
@@ -247,7 +247,7 @@ async def checkupdate(bot):
                             pass
             except:
                 ranking = ranking_check
-        '''
+        
         if current_time[1][3:5] in ['00','30']:
             await asyncio.sleep(30)
             try:
