@@ -36,7 +36,7 @@ async def checkupdate(bot):
     try:
         news_latest = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
         news_now = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
-        maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/pc/maintenance/maintenance.png')
+        maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
         ranking = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
         foobaa_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
         ollumi_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/843672', headers={'token': cfg.token_jp}).json()["Level"]
@@ -49,10 +49,6 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('獲取公告失敗')
         failure = 1
-    ##############################
-    #測試
-    ##############################
-    news_now.pop(0)
     try:
         [width, height] = size(maint_img)
         img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
