@@ -1,5 +1,6 @@
 import cfg
 import requests
+import json
 
 '''
 def loadnick():
@@ -12,8 +13,10 @@ def loadnick():
     return
 '''
 def loadnick():
+    char_url = 'https://otogimigwest.blob.core.windows.net/prodassets/MasterData/MMonsters.json'
+
+    data=requests.get(char_url).json()
     l=[]
-    l2=[]
     result="""
 ヴェルメリオ,SP1,小紅帽
 ティンカー・ベル,SP1,汀可妖精
@@ -671,11 +674,7 @@ B・ドンキ・ホーテ,活動,
         x = item.split(',')
         result2[x[0]]=x[1]
         result3[x[0]]=x[2]
-    update=[]
-    l_name=[]
-    data2=[]
-        
-    for item in cfg.MMonsters:
+    for item in data:
         if item['r']!=5:
             continue    
         if item['n'] == 'ノンデレラ ':
