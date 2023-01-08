@@ -815,8 +815,8 @@ async def publicUI(message,bot):
                         if y['l'] == y['ml'] and y['d'] != '':
                             myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']), value=y['d'], inline=False)
                             
-                if int(str(x['id'])[1:4]) in cfg.another_skill:
-                    i=cfg.another_skill[int(str(x['id'])[1:4])]
+                if int(str(int(x['id'])//10-1000)) in cfg.another_skill:
+                    i=cfg.another_skill[int(str(int(x['id'])//10-1000))]
                     for y in skill_for_search:
                         if y['id'] == i:
                             myembed.add_field(name="【Another Skill】" + y['n'], value=y['d'], inline=False)
