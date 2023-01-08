@@ -440,6 +440,15 @@ def skillsourcecate():
     cfg.another_skill[882] = 27865 #正月桃
     cfg.another_skill[883] = 37035 #正月汀
     
+    another_skill[1018] = 600005 #正月武神
+    another_skill[1020] = 600015 #正月武神
+    another_skill[1019] = 600025 #正月武神
+    another_skill[1021] = 600035 #正月武神
+    another_skill[1025] = 600045 #正月武神
+    another_skill[1026] = 600055 #正月武神
+    another_skill[1027] = 600075 #正月武神
+    another_skill[1028] = 600065 #正月武神
+    
 
 def updatemfiles():
     cfg.MSkills = requests.get(addressS).json()
