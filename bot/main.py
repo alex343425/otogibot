@@ -7,6 +7,7 @@ from nick import loadnick, loadsp
 from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from discord.ext import commands
 
+intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!",intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
 
