@@ -448,7 +448,7 @@ async def privateUI(message,bot):
         except:
             await message.channel.send('未找到魔宮殿信息')
             return
-        palace_result = []
+        palace_result = ''
         dict_em = { 1:'水',2:'樹',3:'火',4:'闇',5:'光'}
         dict_wep = { 1:'劍',2:'斧',3:'槍',4:'本',5:'杖',6:'短',7:'弓',8:'特'}
         for x in palace['Locations']:
@@ -459,11 +459,11 @@ async def privateUI(message,bot):
             wepstr=''
             for wepdata in wep:
                 wepstr +=dict_wep[wepdata]
-            palace_result.append([x['Name']+'　','　'+dict_em[em]+'　','　'+wepstr+'　'])
-        df = pd.DataFrame(palace_result, columns=['名字', '弱屬', '弱武'])
+            palace_result+=x['Name']+':　'+dict_em[em]+' + '+wepstr+'\n'
+        #df = pd.DataFrame(palace_result, columns=['名字', '弱屬', '弱武'])
         # 将第一列设为索引列
-        df = df.set_index('名字')
-        myembed = discord.Embed(title='星之魔宮殿', description=df.to_string())
+        #df = df.set_index('名字')
+        myembed = discord.Embed(title='星之魔宮殿', description=palace_result)
         try:
             await message.channel.send(embed=myembed)
         except:
