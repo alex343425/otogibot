@@ -459,7 +459,7 @@ async def privateUI(message,bot):
             wepstr=''
             for wepdata in wep:
                 wepstr +=dict_wep[wepdata]
-            palace_result.append([x['Name'],dict_em[em],wepstr])
+            palace_result.append([x['Name']+'　','　'+dict_em[em]+'　','　'+wepstr+'　'])
         df = pd.DataFrame(palace_result, columns=['名字', '弱屬', '弱武'])
         # 将第一列设为索引列
         df = df.set_index('名字')
