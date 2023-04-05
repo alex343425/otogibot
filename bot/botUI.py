@@ -9,6 +9,7 @@ from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from PIL import Image
 from io import BytesIO
 from checkupdate import ch_number
+import pandas as pd
 
 async def utilityUI(message,bot):
     if message.content.startswith('!ping'):
@@ -253,6 +254,7 @@ async def privateUI(message,bot):
         return
         
     if message.content.lower().startswith('?labyrinth'):
+    
         def get_img(img_url):
             return Image.open(BytesIO(requests.get(img_url).content))
         url = cfg.addressHead3 + 'Dungeons/1'
@@ -439,6 +441,35 @@ async def privateUI(message,bot):
         myembed.set_image(url="attachment://canvas.png")
         await message.channel.send(file=file, embed=myembed)
         return
+    
+    if message.content.lower().startswith('?palace'):
+        try:
+            palace = requests.get('https://otogi-rest.otogi-frontier.com/api/Worlds/70001', headers={'token': cfg.token_jp}).json()
+        except:
+            await message.channel.send('未找到魔宮殿信息')
+            return
+        palace_result = []
+        dict_em = { 1:'水',2:'樹',3:'火',4:'闇',5:'光'}
+        dict_wep = { 1:'劍',2:'斧',3:'槍',4:'本',5:'杖',6:'短',7:'弓',8:'特'}
+        for x in palace['Locations']:
+            url2='https://otogi-rest.otogi-frontier.com/api/Locations/'+str(x['Id'])
+            r2 = requests.get(url2,headers={'token':token_jp}).json()['Quests']
+            em = r2[len(r2)-1]['ThumbnailMonsterAttribute']
+            wep =  r2[len(r2)-1]['WeakWeaponCategories']
+            wepstr=''
+            for wepdata in wep:
+                wepstr +=dict_wep[wepdata]
+            palace_result.append([x['Name'],dict_em[em],wepstr])
+        df = pd.DataFrame(palace_result, columns=['名字', '弱屬', '弱武'])
+        # 将第一列设为索引列
+        df = df.set_index('名字')
+        myembed = discord.Embed(title='星之魔宮殿', description=df.to_string())
+        try:
+            await message.channel.send(embed=myembed)
+        except:
+            await message.channel.send('錯誤 請回報BUG')
+        return
+        
     return
 
 async def publicUI(message,bot):
