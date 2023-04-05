@@ -453,7 +453,7 @@ async def privateUI(message,bot):
         dict_wep = { 1:'劍',2:'斧',3:'槍',4:'本',5:'杖',6:'短',7:'弓',8:'特'}
         for x in palace['Locations']:
             url2='https://otogi-rest.otogi-frontier.com/api/Locations/'+str(x['Id'])
-            r2 = requests.get(url2,headers={'token':token_jp}).json()['Quests']
+            r2 = requests.get(url2,headers={'token':cfg.token_jp}).json()['Quests']
             em = r2[len(r2)-1]['ThumbnailMonsterAttribute']
             wep =  r2[len(r2)-1]['WeakWeaponCategories']
             wepstr=''
