@@ -634,16 +634,13 @@ async def publicUI(message,bot):
                 search_result = isindamage(keyword,x['d'])
             elif 'e' in cate:
                 search_result = isininterval(keyword,x['d'])
-            elif 'z' in cate:####不重複
+            else:
+                search_result = isinand(keyword,x['n']+x['d'])
+            if 'z' in cate and search_result == True:####不重複
                 if x['tm'] in norepeated:
                     search_result = False
                 else:
-                    search_result = isinand(keyword,x['d'])
-                    if search_result == True:
-                        norepeated.append(x['tm'])
-            else:
-                search_result = isinand(keyword,x['n']+x['d'])
-  
+                    norepeated.append(x['tm'])
             if search_result:
                 name_jp = str(list_num) + '.技能名:' + x['n'] + '【' + setskilltype(skillcate)
                 name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr']) 
