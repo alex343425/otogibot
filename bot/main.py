@@ -35,7 +35,7 @@ privateUICommandList = {'?getcg',
                         '?loadsp',
                         '?update',
                         '?labyrinth',
-                        '?palace',
+                        '?palace'
                         }
 
 publicUICommandList = {'?char',
