@@ -7,7 +7,7 @@ from nick import loadnick, loadsp
 from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="!",intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 guild_ids = {855879876815618078, # Test Server
