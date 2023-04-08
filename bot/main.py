@@ -4,7 +4,7 @@ import asyncio
 from botUI import utilityUI, funUI, privateUI, publicUI , publicUI_kirby
 from checkupdate import checkupdate
 from nick import loadnick, loadsp
-from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
+from parseskills import skillsourcecate, updatemfiles
 from discord.ext import commands
 
 intents = discord.Intents.all()
