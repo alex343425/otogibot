@@ -41,20 +41,14 @@ privateUICommandList = {'?getcg',
 
 publicUICommandList = {'?char',
                        '？char',
-                       '?chartw',
-                       '？chartw',
                        '?nick',
                        '？nick',
-                       '?nicktw',
-                       '？nicktw',
                        '?spirit',
                        '？spirit',
                        '?be',
                        '？be',
                        '?卡池',
                        '？卡池',
-                       '?betw',
-                       '？betw',
                        '!story',
                        '!event'                       
                        }
@@ -67,7 +61,7 @@ loadnick()
 loadsp()
 updatemfiles()
 skillsourcecate()
-skillsourcecate_tw()
+
 
 @bot.event
 async def on_ready():

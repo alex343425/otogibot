@@ -5,7 +5,7 @@ import cfg
 from nick import matchnick, loadnick, loadsp
 from idparse import check_sc, check_sa, isinforward, isinor, isinbackward, isindamage, isininterval, isinand, setskilltype, skillclass, weaponclass, skillrank, attribute
 from cgunity import cg_extract
-from parseskills import skillsourcecate,skillsourcecate_tw, updatemfiles
+from parseskills import skillsourcecate, updatemfiles
 from PIL import Image
 from io import BytesIO
 from checkupdate import ch_number
@@ -247,9 +247,7 @@ async def privateUI(message,bot):
         updatemfiles()
         await message.channel.send('檔案讀取完成')
         skillsourcecate()
-        await message.channel.send('日版技能整理完成')
-        skillsourcecate_tw()
-        await message.channel.send('台版技能整理完成')
+        await message.channel.send('技能整理完成')
         await message.channel.send('Updated.')
         return
         
@@ -474,7 +472,7 @@ async def privateUI(message,bot):
 
 async def publicUI(message,bot):
     nickname = message.author.name
-    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill') or message.content.startswith('?skitw') or message.content.startswith('？skitw'):
+    if message.content.lower().startswith('?skill') or message.content.lower().startswith('？skill'):
         keyword = message.content.split(' ')
         n = len(keyword)
         keyword[0] = keyword[0].replace('？','?')
@@ -498,10 +496,8 @@ async def publicUI(message,bot):
         #不重複結果
         
         skill_for_search=[]
-        if message.content.startswith('?skitw') or message.content.startswith('？skitw'):
-            skill_for_search = cfg.MSkills_tw
-        else:
-            skill_for_search = cfg.MSkills
+
+        skill_for_search = cfg.MSkills
         
         result_list_display=False
         if '*' in cate:
@@ -801,7 +797,7 @@ async def publicUI(message,bot):
       
         nick_list=[]
         
-        if message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick') or message.content.lower().startswith('?nicktw') or message.content.lower().startswith('？nicktw'):
+        if message.content.lower().startswith('?nick') or message.content.lower().startswith('？nick'):
             nick_list = matchnick(keyword)
             if nick_list == 0:
                 await message.channel.send('沒有找到任何結果')
@@ -818,16 +814,12 @@ async def publicUI(message,bot):
         skill_for_search=[]
         weapons_for_search=[]
         accessory_for_search=[]
-        if 'tw' in message.content.lower().split(' ')[0]:
-            monsters_for_search = cfg.MMonsters_tw
-            skill_for_search = cfg.MSkills_tw
-            weapons_for_search = cfg.MWeapons_tw
-            accessory_for_search = cfg.MAccessory_tw
-        else:
-            monsters_for_search = cfg.MMonsters
-            skill_for_search = cfg.MSkills
-            weapons_for_search = cfg.MWeapons
-            accessory_for_search = cfg.MAccessory
+
+
+        monsters_for_search = cfg.MMonsters
+        skill_for_search = cfg.MSkills
+        weapons_for_search = cfg.MWeapons
+        accessory_for_search = cfg.MAccessory
         
         for x in monsters_for_search:
             if ( isinand(keyword,str(int(x['id'])//10-1000)+x['n']) or str(x['id']) in nick_list ) and x['ce'] == x['me']:
@@ -1082,21 +1074,13 @@ async def publicUI(message,bot):
         return
     
     if message.content.lower().startswith('?be') or message.content.lower().startswith('？be'):
-        if 'tw' in message.content.lower():
-            try:
-                url = 'https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/'
-                response = requests.get(url, headers={'token': cfg.token_cn})
-            except:
-                await message.channel.send('找不到相應信息')
-                return
-            
-        else:
-            try:
-                url = 'https://api-pc.otogi-frontier.com/api/Events/17001/ranking/'
-                response = requests.get(url, headers={'token': cfg.token_jp})
-            except:
-                await message.channel.send('找不到相應信息')
-                return
+
+        try:
+            url = 'https://api-pc.otogi-frontier.com/api/Events/17001/ranking/'
+            response = requests.get(url, headers={'token': cfg.token_jp})
+        except:
+            await message.channel.send('找不到相應信息')
+            return
             
         title = response.json()["ThisWeekQuestName"]
         ranking = response.json()["ThisWeekTopPlayers"]
@@ -1585,20 +1569,4 @@ async def publicUI(message,bot):
     return
 
 async def publicUI_kirby(message,bot):
-    nickname = message.author.name
-    try:
-        ranking_check = requests.get('https://otogi-traffic-dmm-tw.trafficmanager.net/api/Events/17001/ranking/', headers={'token': cfg.token_cn}).json()['ThisWeekTopPlayers']
-    except:
-        return
-    result = ''
-    for x in ranking_check:
-        if x['UUserId'] == 149325:
-            result='碳基神目前排名第 '+str(x['Rank'])+'\n分數是 '+ch_number(int(x['Score']))+'\n謝謝碳基神！'
-            break
-    if result == '':
-        return
-    try:
-        await message.channel.send(result)
-    except:
-        pass
-    return
+    pass
