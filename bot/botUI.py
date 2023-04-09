@@ -1575,6 +1575,7 @@ async def publicUI_kirby(message,bot):
     async def get_img(img_url):
         return Image.open(BytesIO(requests.get(img_url).content))
     reminder_channel = bot.get_channel(626708913257185280)
+    starting_channel = bot.get_channel(855880177224253440)
     if message.content.lower().startswith('?公告'):
         news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
         keyword = message.content.split(' ')[1]
