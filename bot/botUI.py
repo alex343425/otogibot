@@ -1570,7 +1570,7 @@ async def publicUI(message,bot):
 
 async def publicUI_kirby(message,bot):
     news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
-    keyword = str(message.content.lower().split(' ')[1:n])
+    keyword = message.content.split(' ')[1]
     for x in news_latest_check:
         if keyword != str(x['Id']):
             continue
