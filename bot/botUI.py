@@ -1632,12 +1632,11 @@ async def publicUI_kirby(message,bot):
                 img.save('news.png')
                 file1 = discord.File('news.png',filename='news.png')
                 file2 = discord.File('news.png',filename='news.png')
-                myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
+                myembed = discord.Embed(title='【#' + str(手動) + '】', color=10181046)
                 myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
                 myembed.set_image(url="attachment://news.png")
                 await reminder_channel_alt.send(file=file1, embed=myembed)
-                await reminder_channel.send(file=file2, embed=myembed)
-                news_i += 1
+                await reminder_channel.send(file=file2, embed=myembed)                
             except:
                 await starting_channel.send('獲取活动圖片失敗')
                 await starting_channel.send(img_url)
