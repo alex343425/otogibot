@@ -1573,6 +1573,7 @@ async def publicUI(message,bot):
 async def publicUI_kirby(message,bot):
     news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
     keyword = message.content.split(' ')[1]
+    reminder_channel = bot.get_channel(626708913257185280)
     for x in news_latest_check:
         if keyword != str(x['Id']):
             continue
