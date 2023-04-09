@@ -52,10 +52,7 @@ publicUICommandList = {'?char',
                        '!story',
                        '!event'                       
                        }
-publicUICommandList_kirby={'!碳基打競技',
-                           '！碳基打競技'
-    
-    }
+publicUICommandList_kirby={'?公告'}
 
 loadnick()
 loadsp()
@@ -96,10 +93,16 @@ async def on_message(message):
     if message.content.split(' ')[0] in publicUICommandList or message.content.startswith('?skill') or message.content.startswith('？skill') or message.content.startswith('?story') or message.content.startswith('?event') or message.content.startswith('?skitw') or message.content.startswith('？skitw'):
         await publicUI(message,bot)
         return
-    
+
     if message.content.split(' ')[0] in publicUICommandList_kirby:
+        if message.author.id in private_message_ids:
+            pass
+        else:
+            return
         await publicUI_kirby(message,bot)
         return
+        
+
 
 if __name__ == "__main__":
     bot.run(TOKEN)

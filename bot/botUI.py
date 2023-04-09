@@ -1569,4 +1569,45 @@ async def publicUI(message,bot):
     return
 
 async def publicUI_kirby(message,bot):
-    pass
+    news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
+    keyword = str(message.content.lower().split(' ')[1:n])
+    for x in news_latest_check:
+        if keyword != str(x['Id']):
+            continue
+        soup = BeautifulSoup(x['Body'],'html.parser')
+        text_reminder = soup.text
+        try:
+            myembed = discord.Embed(title=x['Title'], color=10181046)
+            myembed.set_author(name="新公告", icon_url=cfg.icon_url)
+            
+            passage = 1
+            max_length = 500
+            while len(text_reminder) > max_length:
+                location = text_reminder[max_length:].find('\n')
+                text_reminder_cut = text_reminder[0:max_length+location+1]
+                myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder_cut, inline=False)
+                text_reminder = text_reminder[max_length+location+1:]
+                passage += 1
+            if passage > 1:
+                myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder, inline=False)
+            else:
+                myembed.add_field(name='公告內容', value=text_reminder, inline=False)
+            await reminder_channel.send(embed=myembed)
+        except:
+            text_reminder = soup.text
+            await reminder_channel.send('```' + '新公告:' + x['Title'] + '```')
+            
+            passage = 1
+            while len(text_reminder) > 1500:
+                location = text_reminder[1500:].find('\n')
+                text_reminder_cut = text_reminder[0:1500+location+1]
+                await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder_cut + '\n```')
+                text_reminder = text_reminder[1500+location+1:]
+                passage += 1
+            if passage > 1:
+                await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder + '\n```')
+            else:
+                await reminder_channel.send('```\n' + text_reminder + '\n```')
+        count += 1
+        if count == 10:
+            break
