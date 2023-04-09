@@ -10,6 +10,8 @@ from PIL import Image
 from io import BytesIO
 from checkupdate import ch_number
 import pandas as pd
+from bs4 import BeautifulSoup
+
 
 async def utilityUI(message,bot):
     if message.content.startswith('!ping'):
