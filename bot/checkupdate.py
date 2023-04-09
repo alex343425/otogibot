@@ -36,7 +36,7 @@ async def checkupdate(bot):
     try:
         news_latest = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
         news_now = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
-        maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
+        #maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
         ranking = requests.get('https://api-pc.otogi-frontier.com/api/Events/17001/ranking/', headers={'token': cfg.token_jp}).json()
         foobaa_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/10898', headers={'token': cfg.token_jp}).json()["Level"]
         ollumi_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/843672', headers={'token': cfg.token_jp}).json()["Level"]
@@ -50,11 +50,11 @@ async def checkupdate(bot):
         await starting_channel.send('獲取公告失敗')
         failure = 1
     try:
-        [width, height] = size(maint_img)
-        img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
-        a_sum_old = 0
-        for x in array(ImageOps.grayscale(img_save)):
-            a_sum_old += sum(x)
+        #[width, height] = size(maint_img)
+        #img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
+        #a_sum_old = 0
+        #for x in array(ImageOps.grayscale(img_save)):
+        #    a_sum_old += sum(x)
         
         print("Logged in as {}({})".format(bot.user.name, bot.user.id))
         await starting_channel.send('Bot initiated.')
@@ -344,6 +344,7 @@ async def checkupdate(bot):
                         await starting_channel.send(img_url)
             if overall_check_mark == 1:
                 news_now = news_now_check
+            '''
             try:
                 maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
                 [width, height] = size(maint_img)
@@ -365,4 +366,5 @@ async def checkupdate(bot):
                 myembed.set_author(name="維修公告", icon_url=cfg.icon_url)
                 myembed.set_image(url="attachment://news.png")
                 await reminder_channel_alt.send(file=file, embed=myembed)
+            '''
             
