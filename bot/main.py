@@ -52,7 +52,7 @@ publicUICommandList = {'?char',
                        '!story',
                        '!event'                       
                        }
-publicUICommandList_kirby={'?公告'}
+publicUICommandList_kirby={'?公告','?圖片'}
 
 loadnick()
 loadsp()

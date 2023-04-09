@@ -6,11 +6,12 @@ from nick import matchnick, loadnick, loadsp
 from idparse import check_sc, check_sa, isinforward, isinor, isinbackward, isindamage, isininterval, isinand, setskilltype, skillclass, weaponclass, skillrank, attribute
 from cgunity import cg_extract
 from parseskills import skillsourcecate, updatemfiles
-from PIL import Image
 from io import BytesIO
 from checkupdate import ch_number
 import pandas as pd
 from bs4 import BeautifulSoup
+from numpy import size, array
+from PIL import Image, ImageOps
 
 
 async def utilityUI(message,bot):
@@ -1571,46 +1572,73 @@ async def publicUI(message,bot):
     return
 
 async def publicUI_kirby(message,bot):
-    news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
-    keyword = message.content.split(' ')[1]
+    async def get_img(img_url):
+        return Image.open(BytesIO(requests.get(img_url).content))
     reminder_channel = bot.get_channel(626708913257185280)
-    for x in news_latest_check:
-        if keyword != str(x['Id']):
-            continue
-        soup = BeautifulSoup(x['Body'],'html.parser')
-        text_reminder = soup.text
-        try:
-            myembed = discord.Embed(title=x['Title'], color=10181046)
-            myembed.set_author(name="新公告", icon_url=cfg.icon_url)
-            
-            passage = 1
-            max_length = 500
-            while len(text_reminder) > max_length:
-                location = text_reminder[max_length:].find('\n')
-                text_reminder_cut = text_reminder[0:max_length+location+1]
-                myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder_cut, inline=False)
-                text_reminder = text_reminder[max_length+location+1:]
-                passage += 1
-            if passage > 1:
-                myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder, inline=False)
-            else:
-                myembed.add_field(name='公告內容', value=text_reminder, inline=False)
-            await reminder_channel.send(embed=myembed)
-        except:
+    if message.content.lower().startswith('?公告'):
+        news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
+        keyword = message.content.split(' ')[1]
+        for x in news_latest_check:
+            if keyword != str(x['Id']):
+                continue
+            soup = BeautifulSoup(x['Body'],'html.parser')
             text_reminder = soup.text
-            await reminder_channel.send('```' + '新公告:' + x['Title'] + '```')
-            
-            passage = 1
-            while len(text_reminder) > 1500:
-                location = text_reminder[1500:].find('\n')
-                text_reminder_cut = text_reminder[0:1500+location+1]
-                await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder_cut + '\n```')
-                text_reminder = text_reminder[1500+location+1:]
-                passage += 1
-            if passage > 1:
-                await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder + '\n```')
-            else:
-                await reminder_channel.send('```\n' + text_reminder + '\n```')
-        count += 1
-        if count == 10:
-            break
+            try:
+                myembed = discord.Embed(title=x['Title'], color=10181046)
+                myembed.set_author(name="新公告", icon_url=cfg.icon_url)
+                
+                passage = 1
+                max_length = 500
+                while len(text_reminder) > max_length:
+                    location = text_reminder[max_length:].find('\n')
+                    text_reminder_cut = text_reminder[0:max_length+location+1]
+                    myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder_cut, inline=False)
+                    text_reminder = text_reminder[max_length+location+1:]
+                    passage += 1
+                if passage > 1:
+                    myembed.add_field(name='公告第' + str(passage) + '段', value=text_reminder, inline=False)
+                else:
+                    myembed.add_field(name='公告內容', value=text_reminder, inline=False)
+                await reminder_channel.send(embed=myembed)
+            except:
+                text_reminder = soup.text
+                await reminder_channel.send('```' + '新公告:' + x['Title'] + '```')
+                
+                passage = 1
+                while len(text_reminder) > 1500:
+                    location = text_reminder[1500:].find('\n')
+                    text_reminder_cut = text_reminder[0:1500+location+1]
+                    await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder_cut + '\n```')
+                    text_reminder = text_reminder[1500+location+1:]
+                    passage += 1
+                if passage > 1:
+                    await reminder_channel.send('```\n公告第' + str(passage) + '段:\n' + text_reminder + '\n```')
+                else:
+                    await reminder_channel.send('```\n' + text_reminder + '\n```')
+            count += 1
+            if count == 10:
+                break
+        return
+    if message.content.lower().startswith('?圖片'):
+        keyword = str(message.content.split(' ')[1])
+        news_now = requests.get(cfg.addressnow, headers={'token': cfg.token_jp}).json()
+        for x in news_now:
+            if keyword != str(x['Order']):
+                continue                
+            img_url = 'https://az-otogi-web-assets.azureedge.net/static/sp/Banner/Info/' + x['ImagePath']
+            try:
+                img = await get_img(img_url)
+                img.save('news.png')
+                file1 = discord.File('news.png',filename='news.png')
+                file2 = discord.File('news.png',filename='news.png')
+                myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
+                myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
+                myembed.set_image(url="attachment://news.png")
+                await reminder_channel_alt.send(file=file1, embed=myembed)
+                await reminder_channel.send(file=file2, embed=myembed)
+                news_i += 1
+            except:
+                await starting_channel.send('獲取活动圖片失敗')
+                await starting_channel.send(img_url)
+
+        

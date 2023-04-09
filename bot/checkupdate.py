@@ -327,7 +327,7 @@ async def checkupdate(bot):
                 if check_mark == 0:
                     overall_check_mark = 1
                     
-                    img_url = 'https://cos-web-assets.otogi-frontier.com/static/sp/Banner/Info/' + x['ImagePath']
+                    img_url = 'https://az-otogi-web-assets.azureedge.net/static/sp/Banner/Info/' + x['ImagePath']
                     try:
                         img = await get_img(img_url)
                         img.save('news.png')
