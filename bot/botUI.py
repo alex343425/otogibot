@@ -844,7 +844,12 @@ async def publicUI(message,bot):
                         if y['id'] == i:
                             myembed.add_field(name="【Another Skill】" + y['n'], value=y['d'], inline=False)
                             break
-                
+                if int(str(int(x['id'])//10-1000)) in cfg.ult_skill:
+                    i=cfg.ult_skill[int(str(int(x['id'])//10-1000))]
+                    for y in skill_for_search:
+                        if y['id'] == i:
+                            myembed.add_field(name="【ULT Skill】" + y['n'], value=y['d'], inline=False)
+                            break
                 
                 for y in weapons_for_search:
                     if y['rmid'] == x['rmid']:

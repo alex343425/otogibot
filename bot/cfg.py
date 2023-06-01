@@ -8,6 +8,7 @@ nickname = []
 spjson = []
 
 another_skill={}
+ult_skill={}
 
 token_jp = '8b00d233-168c-41fd-a4ac-500e3da7ef15'
 

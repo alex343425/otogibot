@@ -239,6 +239,11 @@ def skillsourcecate():
     cfg.another_skill[1027] = 600075 #正月武神
     cfg.another_skill[1028] = 600065 #正月武神
     
+    cfg.ult_skill[1066] = 11000001 #エスカ・ルビー 光
+    cfg.ult_skill[1067] = 11000011 #エスカ・サファイア 水
+    cfg.ult_skill[1069] = 20000001 #エスカ・トパーズ 樹
+    cfg.ult_skill[1070] = 11000021 #エスカ・アメイズ 火特
+    
 
 def updatemfiles():
     cfg.MSkills = requests.get(addressS).json()
