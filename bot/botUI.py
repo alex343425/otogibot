@@ -1324,7 +1324,7 @@ async def publicUI(message,bot):
                     address = cfg.url_jp + str(scene_num)
                     response = requests.get(address, headers={'token': cfg.token_jp})
               
-                    mydic = response.json()["MSceneDetails"]
+                    mydic = response.json()["MSceneDetails"][0]
                     chapter_title = '#'+str(scene_num)+':'+response.json()["Title"]
                     myembed_jp = discord.Embed(title=chapter_title, color=10181046)
                     myembed_jp.set_footer(text=nickname + ":日文劇情")
