@@ -1323,9 +1323,10 @@ async def publicUI(message,bot):
                 try:
                     address = cfg.url_jp + str(scene_num)
                     response = requests.get(address, headers={'token': cfg.token_jp})
-              
-                    mydic = response.json()["MSceneDetails"][0]
-                    chapter_title = '#'+str(scene_num)+':'+response.json()["Title"]
+
+                    response = response.json()[0]
+                    mydic = response["MSceneDetails"]
+                    chapter_title = '#'+str(scene_num)+':'+response["Title"]
                     myembed_jp = discord.Embed(title=chapter_title, color=10181046)
                     myembed_jp.set_footer(text=nickname + ":日文劇情")
                   
@@ -1354,9 +1355,10 @@ async def publicUI(message,bot):
                 try:
                     address = cfg.url_cn + str(scene_num)
                     response = requests.get(address, headers={'token': cfg.token_cn})
-              
-                    mydic = response.json()["MSceneDetails"]
-                    chapter_title = '#'+str(scene_num)+':'+response.json()["Title"]
+                    response = response.json()[0]
+                    
+                    mydic = response["MSceneDetails"]
+                    chapter_title = '#'+str(scene_num)+':'+response["Title"]
                     myembed_cn = discord.Embed(title=chapter_title, color=10181046)
                     myembed_cn.set_footer(text=nickname + ":中文劇情")
                   
