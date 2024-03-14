@@ -267,7 +267,7 @@ async def privateUI(message,bot):
         
         space = 39
         red_mark = get_img('https://cdn.discordapp.com/emojis/807226965891088404.png').resize((36,36))
-        canvas = get_img('https://i.imgur.com/RiCgv5i.png')
+        canvas = get_img('https://raw.githubusercontent.com/alex343425/otogibot/main/canvas2.png')
         
         myembed = discord.Embed(title='迷宮關卡要求', color=10181046)
         myembed.set_footer(text=nickname + "的請求")
