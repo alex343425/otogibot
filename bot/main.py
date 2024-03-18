@@ -73,7 +73,14 @@ async def on_message(message):
         pass
     else:
         return
-      
+
+    if "@everyone" in message.content:
+        # 踢除用户
+        await message.guild.ban(message.author, reason="提及了 everyone", delete_message_seconds=3600)
+
+        # 发送通知
+        await message.channel.send(f"{message.author.mention} 由於提及了 everyone，已被踢除！")
+
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
         return
