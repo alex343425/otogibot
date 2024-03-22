@@ -314,7 +314,7 @@ async def checkupdate(bot):
                 if count == 10:
                     break
             if overall_check_mark == 1:
-                news_latest = news_latest_check
+                news_latest = news_latest_check.copy()
             overall_check_mark = 0
             news_i = 1
             
@@ -343,7 +343,8 @@ async def checkupdate(bot):
                         await starting_channel.send('獲取活动圖片失敗')
                         await starting_channel.send(img_url)
             if overall_check_mark == 1:
-                news_now = news_now_check
+                news_now = news_now_check.copy()
+            overall_check_mark = 0
             '''
             try:
                 maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
