@@ -74,9 +74,9 @@ async def on_message(message):
     else:
         return
     # 添加新功能: 當有人在頻道ID = 803624040529920001內輸入「謝謝」時，發送Direct Message
-    if message.channel.id == 803624040529920001 and "謝謝海苔" in message.content:
+    if message.channel.id == 803624040529920001 and "謝謝緋神" in message.content:
         try:
-            await message.author.send("https://mega.nz/folder/HRRxHSaC#dDdCYEtoOt0QoDvKEvR4NQ")
+            await message.author.send("https://mega.nz/folder/QcBzGSrB#c6khaXbbF9sIuhQ7lgY_Zg")
         except discord.Forbidden:
             # 無法發送DM，可能用戶設定不接受DM
             print(f"無法發送DM給 {message.author}")
