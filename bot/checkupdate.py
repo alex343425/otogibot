@@ -1,5 +1,5 @@
 import discord
-import datetime
+from datetime import datetime, timedelta
 import asyncio
 import requests
 import cfg
@@ -7,6 +7,126 @@ from numpy import size, array
 from PIL import Image, ImageOps
 from io import BytesIO
 from bs4 import BeautifulSoup
+import pytz
+import calendar
+
+def get_last_day_of_month_23_59(gmt_plus_9_time):
+
+    # 取得當前年份和月份
+    year = gmt_plus_9_time.year
+    month = gmt_plus_9_time.month
+    
+    # 取得當月的最後一天
+    last_day = calendar.monthrange(year, month)[1]
+    
+    # 設定為當月最後一天的 23:59
+    last_day_23_59 = gmt_plus_9_time.replace(day=last_day, hour=23, minute=59, second=0, microsecond=0)
+    
+    return last_day_23_59
+
+
+def get_sunday_23_59(gmt_plus_9_time):
+
+    # 計算當前是星期幾 (星期日是 6)
+    days_until_sunday = 6 - gmt_plus_9_time.weekday()
+    
+    # 計算當週的星期日
+    sunday_23_59 = gmt_plus_9_time + timedelta(days=days_until_sunday)
+    sunday_23_59 = sunday_23_59.replace(hour=23, minute=59, second=0, microsecond=0)
+    
+    return sunday_23_59
+
+def get_14th_23_59(gmt_plus_9_time):
+    # 取得當月 14 日的 23:59
+    date_14th = gmt_plus_9_time.replace(day=14, hour=23, minute=59, second=0, microsecond=0)
+    
+    # 如果當前時間超過了本月的 14 日 23:59，則計算下個月的 14 日 23:59
+    if gmt_plus_9_time > date_14th:
+        # 如果當前月份是 12 月，則進入下一年
+        if gmt_plus_9_time.month == 12:
+            year = gmt_plus_9_time.year + 1
+            month = 1
+        else:
+            year = gmt_plus_9_time.year
+            month = gmt_plus_9_time.month + 1
+        
+        # 取得下個月 14 日的 23:59
+        date_14th = date_14th.replace(year=year, month=month, day=14)
+    
+    return date_14th
+
+def time_trans(s):
+    return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
+
+def event_check():
+    # 取得伺服器當前的時間 (假設是 UTC)
+    utc_time = datetime.utcnow()
+    # 定義 GMT+9 的時區
+    gmt_plus_9 = pytz.timezone('Asia/Tokyo')  # GMT+9 對應的時區
+    # 將 UTC 時間轉換為 GMT+9
+    gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
+    
+    if gmt_plus_9_time.hour != 22:
+        return
+    if gmt_plus_9_time.minute >= 30:
+        return
+    url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
+
+    r = requests.get(url, headers={'token': cfg.token_jp}).json()
+    l=[]
+    l2=[]
+    for x in r['Worlds']:
+        try:
+            date_item = time_trans(x['Event']['EndDate'])
+            if date_item.year == 2100:
+                continue
+            if x['Name'] == '記憶のピラミッド':
+                continue
+            if x['Name'] in l:
+                continue
+            l.append(x['Name'])
+            l2.append((x['Name'],date_item))
+        except:
+            pass
+
+    flag_3day = False
+    flag_1day = False
+    s=''
+    for x,y in l2:
+        y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
+        t = y - gmt_plus_9_time
+        s +=f"{t.days}天 {int(t.seconds/3600)}小時: 活動 {x}\n"
+        if t.days<=3:
+            flag_3day=True
+        if t.days<=1:
+            flag_1day=True
+        
+    t = get_sunday_23_59(gmt_plus_9_time) - gmt_plus_9_time
+    s +=f"魔宮刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    if t.days<=3:
+        flag_3day=True
+    if t.days<=1:
+        flag_1day=True
+    t = get_14th_23_59(gmt_plus_9_time) - gmt_plus_9_time
+    s+=f"深層刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    if t.days<=3:
+        flag_3day=True
+    if t.days<=1:
+        flag_1day=True
+    t = get_last_day_of_month_23_59(gmt_plus_9_time) - gmt_plus_9_time
+    s+=f"金字塔/競技場刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    if t.days<=3:
+        flag_3day=True
+    if t.days<=1:
+        flag_1day=True
+    if flag_3day:
+        s+="有三天內到期的活動 @活動三天提醒"
+    if flag_1day:
+        s+="有一天內到期的活動 @活動一天提醒"
+    s+="@活動提醒"    
+    bot_channel = bot.get_channel(803624040529920001)
+    await bot_channel.send(s)
+    return
 
 def ch_number(i):
     lch = ['','萬','億','兆','京','垓','秭','穰']
@@ -71,7 +191,7 @@ async def checkupdate(bot):
         if failure == 1:
             break
         await asyncio.sleep(30)
-        current_time = str(datetime.datetime.now()).split(' ')
+        current_time = str(datetime.now()).split(' ')
         
         if current_time[1][3:5] in ['03','08','13','18','23','28','33','38','43','48','53','58']:
             await asyncio.sleep(30)
@@ -259,13 +379,13 @@ async def checkupdate(bot):
             overall_check_mark = 0
             
             ##################
-            temp_str=''
-            for x in news_latest_check:
-                temp_str+=str(x['Id'])+' '
-                count+=1
-                if count == 10:
-                    break
-            await log_channel.send(temp_str+'\n'+str(datetime.datetime.now()))                        
+            #temp_str=''
+            #for x in news_latest_check:
+            #    temp_str+=str(x['Id'])+' '
+            #    count+=1
+            #    if count == 10:
+            #        break
+            #await log_channel.send(temp_str+'\n'+str(datetime.datetime.now()))                        
             ##################
             count = 0
             for x in news_latest_check:

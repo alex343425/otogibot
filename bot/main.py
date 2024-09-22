@@ -2,7 +2,7 @@ import os
 import discord
 import asyncio
 from botUI import utilityUI, funUI, privateUI, publicUI , publicUI_kirby
-from checkupdate import checkupdate
+from checkupdate import checkupdate,event_check
 from nick import loadnick, loadsp
 from parseskills import skillsourcecate, updatemfiles
 from discord.ext import commands
@@ -87,7 +87,10 @@ async def on_message(message):
 
         # 发送通知
         await message.channel.send(f"{message.author.mention} 由於提及了 everyone，已被踢除！")
-
+        #####測試
+    if "獲取活動" in message.content:
+        event_check()
+        
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
         return
