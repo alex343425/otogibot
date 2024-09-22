@@ -58,7 +58,7 @@ def get_14th_23_59(gmt_plus_9_time):
 def time_trans(s):
     return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
 
-def event_check():
+def event_check(i):
     # 取得伺服器當前的時間 (假設是 UTC)
     utc_time = datetime.utcnow()
     # 定義 GMT+9 的時區
@@ -66,9 +66,9 @@ def event_check():
     # 將 UTC 時間轉換為 GMT+9
     gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
     
-    if gmt_plus_9_time.hour != 22:
+    if gmt_plus_9_time.hour != 22 and i==0:
         return
-    if gmt_plus_9_time.minute >= 30:
+    if gmt_plus_9_time.minute >= 30 and i==0:
         return
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
 
@@ -368,6 +368,7 @@ async def checkupdate(bot):
                 ranking = ranking_check
         
         if current_time[1][3:5] in ['00','30']:
+            event_check(0)
             await asyncio.sleep(30)
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
