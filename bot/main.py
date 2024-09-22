@@ -89,7 +89,7 @@ async def on_message(message):
         await message.channel.send(f"{message.author.mention} 由於提及了 everyone，已被踢除！")
         #####測試
     if "獲取活動" in message.content:
-        event_check()
+        event_check(1)
         
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
