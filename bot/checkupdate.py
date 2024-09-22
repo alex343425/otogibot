@@ -67,12 +67,14 @@ def event_check(i):
     gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
     
     if gmt_plus_9_time.hour != 22 and i==0:
-        return
+        return 1
     if gmt_plus_9_time.minute >= 30 and i==0:
-        return
+        return 1
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
-
-    r = requests.get(url, headers={'token': cfg.token_jp}).json()
+    try:
+        r = requests.get(url, headers={'token': cfg.token_jp}).json()
+    except:
+        return 1
     l=[]
     l2=[]
     for x in r['Worlds']:
@@ -123,10 +125,8 @@ def event_check(i):
         s+="有三天內到期的活動 @活動三天提醒"
     if flag_1day:
         s+="有一天內到期的活動 @活動一天提醒"
-    s+="@活動提醒"    
-    bot_channel = bot.get_channel(803624040529920001)
-    await bot_channel.send(s)
-    return
+    s+="@活動提醒"        
+    return s
 
 def ch_number(i):
     lch = ['','萬','億','兆','京','垓','秭','穰']
@@ -151,6 +151,7 @@ def ch_number(i):
 async def checkupdate(bot):
     starting_channel = bot.get_channel(855880177224253440)
     log_channel = bot.get_channel(630699387542306839)
+    bot_channel = bot.get_channel(803624040529920001)
     async def get_img(img_url):
         return Image.open(BytesIO(requests.get(img_url).content))
     try:
@@ -368,7 +369,9 @@ async def checkupdate(bot):
                 ranking = ranking_check
         
         if current_time[1][3:5] in ['00','30']:
-            event_check(0)
+            s_result = event_check(0)
+            if len(s_result)>1:                
+                await bot_channel.send(s_result)
             await asyncio.sleep(30)
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
