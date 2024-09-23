@@ -379,7 +379,7 @@ async def checkupdate(bot):
                 myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
                 myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
                 myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
-                myembed_event.set_footer(text=l_result[2])                
+                myembed_event.add_field(name=" ",value=l_result[2],inline=False)
                 await bot_channel.send(embed=myembed_event)
             await asyncio.sleep(30)
             try:
