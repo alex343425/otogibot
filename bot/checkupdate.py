@@ -66,7 +66,7 @@ def event_check():
     # 將 UTC 時間轉換為 GMT+9
     gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
     
-    #if gmt_plus_9_time.hour != 22:
+    #if gmt_plus_9_time.hour != 23:
     #    return ''
     #if gmt_plus_9_time.minute >= 30:
     #    return ''
@@ -94,39 +94,44 @@ def event_check():
     flag_3day = False
     flag_1day = False
     s=''
+    l_result=[]
     for x,y in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
-        s +=f"{t.days}天 {int(t.seconds/3600)}小時: 活動 {x}\n"
+        s +=f"{t.days}天 {int(t.seconds+120/3600)}小時: 活動 {x}\n"
         if t.days<=3:
             flag_3day=True
         if t.days<=1:
             flag_1day=True
-        
+    l_result.append(s)
+    s=''
     t = get_sunday_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s +=f"魔宮刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    s +=f"魔宮刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
         flag_1day=True
     t = get_14th_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"深層刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    s+=f"深層刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
         flag_1day=True
     t = get_last_day_of_month_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"金字塔/競技場刷新 {t.days}天 {int(t.seconds/3600)}小時\n"
+    s+=f"金字塔/競技場刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
         flag_1day=True
+    l_result.append(s)
+    s=''
     if flag_3day:
-        s+="有三天內到期的活動 @活動三天提醒"
+        s+="<@&1287472215947870359> "
     if flag_1day:
-        s+="有一天內到期的活動 @活動一天提醒"
-    s+="@活動提醒"        
-    return s
+        s+="<@&1154075408392781874> "
+    s+="<@&999704934264078576>"
+    l_result.append(s)    
+    return l_result
 
 def ch_number(i):
     lch = ['','萬','億','兆','京','垓','秭','穰']
@@ -369,9 +374,13 @@ async def checkupdate(bot):
                 ranking = ranking_check
         
         if current_time[1][3:5] in ['00','30']:
-            s_result = event_check()
-            if len(s_result)>1:                
-                await bot_channel.send(s_result)
+            l_result = event_check()
+            if len(l_result)>1:
+                myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
+                myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
+                myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
+                myembed_event.set_footer(text=l_result[2])                
+                await bot_channel.send(embed=myembed_event)
             await asyncio.sleep(30)
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
