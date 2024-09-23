@@ -66,10 +66,10 @@ def event_check():
     # 將 UTC 時間轉換為 GMT+9
     gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
     
-    #if gmt_plus_9_time.hour != 23:
-    #    return ''
-    #if gmt_plus_9_time.minute >= 30:
-    #    return ''
+    if gmt_plus_9_time.hour != 23:
+        return ''
+    if gmt_plus_9_time.minute >= 30:
+        return ''
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
     try:
         r = requests.get(url, headers={'token': cfg.token_jp}).json()
@@ -379,7 +379,7 @@ async def checkupdate(bot):
                 myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
                 myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
                 myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)                
-                await bot_channel.send(content=l_result[2],embed=myembed_event)
+                await reminder_channel_alt.send(content=l_result[2],embed=myembed_event)
             await asyncio.sleep(30)
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
