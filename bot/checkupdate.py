@@ -66,10 +66,10 @@ def event_check():
     # 將 UTC 時間轉換為 GMT+9
     gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
     
-    if gmt_plus_9_time.hour != 22:
-        return ''
-    if gmt_plus_9_time.minute >= 30:
-        return ''
+    #if gmt_plus_9_time.hour != 22:
+    #    return ''
+    #if gmt_plus_9_time.minute >= 30:
+    #    return ''
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
     try:
         r = requests.get(url, headers={'token': cfg.token_jp}).json()
@@ -469,27 +469,3 @@ async def checkupdate(bot):
             if overall_check_mark == 1:
                 news_now = news_now_check.copy()
             overall_check_mark = 0
-            '''
-            try:
-                maint_img = await get_img('https://cos-web-assets.otogi-frontier.com/static/sp/maintenance/maintenance.png')
-                [width, height] = size(maint_img)
-                img_save = maint_img.crop((round(width/2),round(height/2),round(width/2)+20,round(height/2)+20))
-                a_sum_new = 0
-            except:
-                await starting_channel.send('獲取維修圖片失敗')
-                continue
-
-            for x in array(ImageOps.grayscale(img_save)):
-                a_sum_new += sum(x)
-            if a_sum_new == a_sum_old:
-                pass
-            else:
-                a_sum_old = a_sum_new
-                maint_img.save('news.png')
-                file = discord.File('news.png',filename='news.png')
-                myembed = discord.Embed(title='網頁版', color=10181046)
-                myembed.set_author(name="維修公告", icon_url=cfg.icon_url)
-                myembed.set_image(url="attachment://news.png")
-                await reminder_channel_alt.send(file=file, embed=myembed)
-            '''
-            
