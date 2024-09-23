@@ -98,7 +98,7 @@ def event_check():
     for x,y in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
-        s +=f"{t.days}天 {int(t.seconds+120/3600)}小時: 活動 {x}\n"
+        s +=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 活動 {x}\n"
         if t.days<=3:
             flag_3day=True
         if t.days<=1:
@@ -106,19 +106,19 @@ def event_check():
     l_result.append(s)
     s=''
     t = get_sunday_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s +=f"魔宮刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
+    s +=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 星之魔宮殿刷新\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
         flag_1day=True
     t = get_14th_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"深層刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
+    s+=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 深層迷宮刷新\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
         flag_1day=True
     t = get_last_day_of_month_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"金字塔/競技場刷新 {t.days}天 {int(t.seconds+120/3600)}小時\n"
+    s+=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 金字塔/競技場刷新\n"
     if t.days<=3:
         flag_3day=True
     if t.days<=1:
@@ -378,9 +378,8 @@ async def checkupdate(bot):
             if len(l_result)>1:
                 myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
                 myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
-                myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
-                myembed_event.add_field(name=" ",value=l_result[2],inline=False)
-                await bot_channel.send(embed=myembed_event)
+                myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)                
+                await bot_channel.send(content=l_result[2],embed=myembed_event)
             await asyncio.sleep(30)
             try:
                 news_latest_check = requests.get(cfg.addresslatest, headers={'token': cfg.token_jp}).json()
