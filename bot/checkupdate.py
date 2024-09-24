@@ -99,7 +99,7 @@ def event_check():
     for x,y in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
-        s +=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 活動 {x}\n"
+        s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: 活動 {x}\n"
         if t.days<=3:
             flag_3day=True
         if t.days<=1:
@@ -111,15 +111,15 @@ def event_check():
         s_mention+="<@&1154075408392781874> "
     s=''
     t = get_sunday_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s +=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 星之魔宮殿刷新\n"
+    s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: 星之魔宮殿刷新\n"
     if t.days<=0:
         s_mention+="<@&1288132433069342752> "
     t = get_14th_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 深層迷宮刷新\n"
+    s+=f"{t.days}天 {int((t.seconds)/3600)+1}小時: 深層迷宮刷新\n"
     if t.days<=1:
         s_mention+="<@&1288132511330861056> "
     t = get_last_day_of_month_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 金字塔/競技場刷新\n"
+    s+=f"{t.days}天 {int((t.seconds)/3600)+1}小時: 金字塔/競技場刷新\n"
     if t.days<=1:
         s_mention+="<@&1288132586274553938> "
     l_result.append(s)    
