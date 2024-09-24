@@ -93,44 +93,38 @@ def event_check():
 
     flag_3day = False
     flag_1day = False
+    s_mention=''
     s=''
     l_result=[]
     for x,y in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
-        s +=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 活動 {x}\n"
+        s +=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 活動 {x}\n"
         if t.days<=3:
             flag_3day=True
         if t.days<=1:
             flag_1day=True
     l_result.append(s)
+    if flag_3day:
+        s_mention+="<@&1287472215947870359> "
+    if flag_1day:
+        s_mention+="<@&1154075408392781874> "
     s=''
     t = get_sunday_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s +=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 星之魔宮殿刷新\n"
-    if t.days<=3:
-        flag_3day=True
-    if t.days<=1:
-        flag_1day=True
+    s +=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 星之魔宮殿刷新\n"
+    if t.days<=0:
+        s_mention+="<@&1288132433069342752> "
     t = get_14th_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 深層迷宮刷新\n"
-    if t.days<=3:
-        flag_3day=True
+    s+=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 深層迷宮刷新\n"
     if t.days<=1:
-        flag_1day=True
+        s_mention+="<@&1288132511330861056> "
     t = get_last_day_of_month_23_59(gmt_plus_9_time) - gmt_plus_9_time
-    s+=f"{t.days}天 {int((t.seconds+120)/3600)}小時: 金字塔/競技場刷新\n"
-    if t.days<=3:
-        flag_3day=True
+    s+=f"{t.days}天 {int((t.seconds+60)/3600)}小時: 金字塔/競技場刷新\n"
     if t.days<=1:
-        flag_1day=True
-    l_result.append(s)
-    s=''
-    if flag_3day:
-        s+="<@&1287472215947870359> "
-    if flag_1day:
-        s+="<@&1154075408392781874> "
-    s+="<@&999704934264078576>"
+        s_mention+="<@&1288132586274553938> "
     l_result.append(s)    
+    s_mention+="<@&999704934264078576>"
+    l_result.append(s_mention)       
     return l_result
 
 def ch_number(i):
