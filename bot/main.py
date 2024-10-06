@@ -6,6 +6,8 @@ from checkupdate import checkupdate,event_check
 from nick import loadnick, loadsp
 from parseskills import skillsourcecate, updatemfiles
 from discord.ext import commands
+from datetime import datetime, timedelta
+import pytz
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!",intents=intents)
@@ -80,6 +82,20 @@ async def on_message(message):
         except discord.Forbidden:
             # 無法發送DM，可能用戶設定不接受DM
             print(f"無法發送DM給 {message.author}")
+    
+    if message.channel.id == 803624040529920001 and "謝謝海苔" in message.content:
+        utc_time = datetime.utcnow()
+        # 定義 GMT+9 的時區
+        gmt_plus_9 = pytz.timezone('Asia/Tokyo')  # GMT+9 對應的時區
+        # 將 UTC 時間轉換為 GMT+9
+        gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
+        comparison_time = gmt_plus_9.localize(datetime(2024, 10, 8, 3, 0, 0))        
+        if gmt_plus_9_time < comparison_time:
+            try:
+                await message.author.send("https://mega.nz/folder/HRRxHSaC#dDdCYEtoOt0QoDvKEvR4NQ")
+            except discord.Forbidden:
+                # 無法發送DM，可能用戶設定不接受DM
+                print(f"無法發送DM給 {message.author}")        
 
     if "@everyone" in message.content:
         # 踢除用户
