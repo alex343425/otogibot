@@ -90,7 +90,15 @@ def event_check():
             l2.append((x['Name'],date_item))
         except:
             pass
-
+    #檢查靈殿
+    url = 'https://otogi-rest.otogi-frontier.com/api/Events/21010'
+    try:
+        r = requests.get(url, headers={'token': cfg.token_jp}).json()        
+        CollapsedTemple = datetime.strptime(r['CollapsedTemple']['PhaseEndDate'], "%Y-%m-%dT%H:%M:%S")
+        l2.append(('天墜霊殿',CollapsedTemple))
+    except:
+        pass
+    
     flag_3day = False
     flag_1day = False
     s_mention=''
