@@ -95,7 +95,8 @@ def event_check():
     try:
         r = requests.get(url, headers={'token': cfg.token_jp}).json()        
         CollapsedTemple = datetime.strptime(r['CollapsedTemple']['PhaseEndDate'], "%Y-%m-%dT%H:%M:%S")
-        l2.append(('天墜霊殿',CollapsedTemple))
+        if CollapsedTemple.year >= 2024:
+            l2.append(('天墜霊殿',CollapsedTemple))
     except:
         pass
     
