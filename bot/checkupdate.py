@@ -109,7 +109,7 @@ def event_check():
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
         if t.days < 0:
-            s +=f"僅領取報酬: 活動 {x}\n"
+            s +=f"僅領取報酬: {x}\n"
             continue        
         s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: {x}\n"
         if t.days<=3:
@@ -138,6 +138,14 @@ def event_check():
     s_mention+="<@&999704934264078576>"
     l_result.append(s_mention)       
     return l_result
+
+def free_gacha_check():    
+    url = 'https://otogi-rest.otogi-frontier.com/api/UGachas?include='
+    r=requests.get(url, headers={'token': cfg.token_jp}).json()['AvailableGachas']    
+    for x in r:
+        if '無料10連ガチャ' in x['Name']:
+            return True
+    return False    
 
 def ch_number(i):
     lch = ['','萬','億','兆','京','垓','秭','穰']
@@ -384,7 +392,9 @@ async def checkupdate(bot):
             if len(l_result)>1:
                 myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
                 myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
-                myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)                
+                myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
+                if free_gacha_check():
+                    myembed_event.add_field(name="免費十連",value='現在有免費十連抽，記得抽',inline=False)
                 await reminder_channel_alt.send(content=l_result[2],embed=myembed_event)
             await asyncio.sleep(30)
             try:
