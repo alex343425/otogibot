@@ -71,7 +71,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     
-    if message.guild.id == None or message.guild.id in guild_ids:
+    if message.guild is None or message.guild.id in guild_ids:
         pass
     else:
         return
