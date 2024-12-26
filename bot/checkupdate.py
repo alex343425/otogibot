@@ -473,9 +473,9 @@ async def checkupdate(bot):
                         check_mark = 1
                         break
                 if check_mark == 0:
-                    overall_check_mark = 1
-                    
-                    img_url = 'https://az-otogi-web-assets.azureedge.net/static/sp/Banner/Info/' + x['ImagePath']
+                    overall_check_mark = 1                    
+                    img_url = 'https://web-assets.otogi-frontier.com/static/sp/Banner/Info/' + x['ImagePath']
+                    img_url2 = 'https://az-otogi-web-assets.azureedge.net/static/sp/Banner/Info/' + x['ImagePath']
                     try:
                         img = await get_img(img_url)
                         img.save('news.png')
@@ -488,8 +488,21 @@ async def checkupdate(bot):
                         await reminder_channel.send(file=file2, embed=myembed)
                         news_i += 1
                     except:
-                        await starting_channel.send('獲取活动圖片失敗')
-                        await starting_channel.send(img_url)
+                        try:
+                            img = await get_img(img_url2)
+                            img.save('news.png')
+                            file1 = discord.File('news.png',filename='news.png')
+                            file2 = discord.File('news.png',filename='news.png')
+                            myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
+                            myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
+                            myembed.set_image(url="attachment://news.png")
+                            await reminder_channel_alt.send(file=file1, embed=myembed)
+                            await reminder_channel.send(file=file2, embed=myembed)
+                            news_i += 1
+                        except:
+                            await starting_channel.send('獲取活动圖片失敗')
+                            await starting_channel.send(img_url)
+                            await starting_channel.send(img_url2)
             if overall_check_mark == 1:
                 news_now = news_now_check.copy()
             overall_check_mark = 0
