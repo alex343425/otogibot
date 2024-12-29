@@ -86,7 +86,8 @@ async def on_message(message):
             except discord.Forbidden:
                 # 無法發送DM，可能用戶設定不接受DM
                 print(f"無法發送DM給 {message.author}")      
-    
+        else:
+            print(f"期限已過，本次只到 {comparison_time}，現在是 {gmt_plus_9_time}")
     if message.guild is None:
         return
     
