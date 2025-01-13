@@ -87,7 +87,7 @@ def event_check():
             if x['Name'] in l:
                 continue
             l.append(x['Name'])
-            l2.append((x['Name'],date_item))
+            l2.append((x['Name'],date_item,x['Id']))
         except:
             pass
     #檢查靈殿
@@ -96,7 +96,7 @@ def event_check():
         r = requests.get(url, headers={'token': cfg.token_jp}).json()        
         CollapsedTemple = datetime.strptime(r['CollapsedTemple']['PhaseEndDate'], "%Y-%m-%dT%H:%M:%S")
         if CollapsedTemple.year >= 2024:
-            l2.append(('天墜霊殿',CollapsedTemple))
+            l2.append(('天墜霊殿',CollapsedTemple,0))
     except:
         pass
     
@@ -116,6 +116,29 @@ def event_check():
             flag_3day=True
         if t.days<=1:
             flag_1day=True
+        #嘗試獲得高難挑戰
+        try:
+            url = 'https://otogi-rest.otogi-frontier.com/api/Events/'+str(z)
+            r_worlds = requests.get(url, headers={'token': cfg.token_jp}).json()['Worlds'][-1]['Id']
+            url='https://otogi-rest.otogi-frontier.com/api/Worlds/'+str(r_worlds)
+            r_quests = requests.get(url, headers={'token': cfg.token_jp}).json()['Locations'][0]['Id']
+            url = 'https://otogi-rest.otogi-frontier.com/api/Locations/'+str(r_quests)
+            r_Locations = requests.get(url, headers={'token': cfg.token_jp}).json()['Quests']
+            event_count=0
+            event_count_lock=0
+            for item in r_Locations:
+                if '高難易度' not in item['Name']:
+                    continue
+                event_count+=1
+                if item['LockDescription'] == None:
+                    event_count_lock+=1
+            if event_count > 0:
+                s+=f"　　　　　高難挑戰開放{event_count_lock}/{event_count}"
+                if event_count_lock == event_count:
+                    s+=f"　已全部開放"
+                s+='\n'
+        except:            
+            pass
     l_result.append(s)
     if flag_3day:
         s_mention+="<@&1287472215947870359> "
