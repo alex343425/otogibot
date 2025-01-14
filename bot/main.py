@@ -108,8 +108,6 @@ async def on_message(message):
             myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
             myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
             myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
-            if free_gacha_check():
-                myembed_event.add_field(name="免費十連",value='現在有免費十連抽，記得抽',inline=False)
             await reminder_channel_alt.send(content=l_result[2],embed=myembed_event)
   
 
