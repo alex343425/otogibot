@@ -105,12 +105,12 @@ def event_check():
     s_mention=''
     s=''
     l_result=[]
-    for x,y in l2:
+    for x,y,z in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
         if t.days < 0:
             s +=f"僅領取報酬: {x}\n"
-            continue        
+            continue
         s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: {x}\n"
         if t.days<=3:
             flag_3day=True

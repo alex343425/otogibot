@@ -102,7 +102,8 @@ async def on_message(message):
         except discord.Forbidden:
             # 無法發送DM，可能用戶設定不接受DM
             print(f"無法發送DM給 {message.author}")
-            
+    if '!呼叫活動通知' in message.content:
+        event_check()
   
 
     if "@everyone" in message.content:
