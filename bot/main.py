@@ -105,6 +105,7 @@ async def on_message(message):
     if '!呼叫活動通知' in message.content:
         l_result = event_check()
         if len(l_result)>1:
+            reminder_channel_alt = bot.get_channel(624974729689694230)
             myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
             myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
             myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
