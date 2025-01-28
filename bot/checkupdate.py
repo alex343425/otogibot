@@ -252,7 +252,7 @@ async def checkupdate(bot):
                 Kirby_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
                 bu_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
             except:
-                pass
+                continue
             try:
                 if foobaa_level_check > foobaa_level:
                     text = 'foobaa等級變動.由' + str(foobaa_level) + '升為' + str(foobaa_level_check) + '.'
