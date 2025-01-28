@@ -7,6 +7,7 @@ from nick import loadnick, loadsp
 from parseskills import skillsourcecate, updatemfiles
 from discord.ext import commands
 from datetime import datetime, timedelta
+import cfg
 import pytz
 
 intents = discord.Intents.all()
@@ -60,7 +61,7 @@ loadnick()
 loadsp()
 updatemfiles()
 skillsourcecate()
-
+cfg.check_day = datetime.now().date() - timedelta(days=1)
 
 @bot.event
 async def on_ready():

@@ -70,6 +70,10 @@ def event_check():
         return ''
     if gmt_plus_9_time.minute >= 30:
         return ''
+    d = datetime.now().date()
+    if d <= cfg.check_day:
+        return ''
+    cfg.check_day = datetime.datetime.now().date()
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
     try:
         r = requests.get(url, headers={'token': cfg.token_jp}).json()
