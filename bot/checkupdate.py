@@ -73,7 +73,7 @@ def event_check():
     d = datetime.now().date()
     if d <= cfg.check_day:
         return ''
-    cfg.check_day = datetime.datetime.now().date()
+    cfg.check_day = datetime.now().date()
     url = 'https://otogi-rest.otogi-frontier.com/api/WorldMap'
     try:
         r = requests.get(url, headers={'token': cfg.token_jp}).json()
