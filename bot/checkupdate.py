@@ -103,6 +103,9 @@ def event_check():
             l2.append(('天墜霊殿',CollapsedTemple,0))
     except:
         pass
+    #2025-2-27看劇情活動
+    y = datetime.strptime('2025-2-27T12:59:59', "%Y-%m-%dT%H:%M:%S")
+    l2.append(('看希臘主線劇情200石',y,0))
     
     flag_3day = False
     flag_1day = False
@@ -113,7 +116,8 @@ def event_check():
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
         if t.days < 0:
-            s +=f"僅領取報酬: {x}\n"
+            if x != '看希臘主線劇情200石':
+                s +=f"僅領取報酬: {x}\n"
             continue
         s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: {x}\n"
         if t.days<=3:
@@ -137,7 +141,7 @@ def event_check():
                 if item['LockDescription'] == None:
                     event_count_lock+=1
             if event_count > 0:
-                s+=f"　　　　　高難挑戰開放{event_count_lock}/{event_count}"
+                s+=f"　　　　　高難挑戰{event_count_lock}/{event_count}"
                 if event_count_lock == event_count:
                     s+=f"　已全部開放"
                 s+='\n'
