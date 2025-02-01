@@ -80,7 +80,7 @@ async def on_message(message):
         gmt_plus_9 = pytz.timezone('Asia/Tokyo')  # GMT+9 對應的時區
         # 將 UTC 時間轉換為 GMT+9
         gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
-        comparison_time = gmt_plus_9.localize(datetime(2025, 1, 11, 3, 0, 0))
+        comparison_time = gmt_plus_9.localize(datetime(2025, 2, 9, 3, 0, 0))
         if gmt_plus_9_time < comparison_time:
             try:
                 await message.author.send("https://mega.nz/folder/HRRxHSaC#dDdCYEtoOt0QoDvKEvR4NQ")
