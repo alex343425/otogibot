@@ -247,15 +247,27 @@ async def privateUI(message,bot):
         
     if message.content.lower().startswith('?update'):
         await message.channel.send('Updating...')
-        try:
-            l_char_temp = cfg.MMonsters.copy()
-        except:
-            pass
         updatemfiles()
         await message.channel.send('檔案讀取完成')
-        new_flag = False
         skillsourcecate()        
         await message.channel.send('技能整理完成 Updated.')
+        try:
+            l_temp=cfg.MMonsters.copy()
+            l_temp.reverse()
+            i=0
+            l_result_new_char=[]
+            result=''
+            while len(l_result_new_char) <= 15:
+                temp=(int(l_temp[i]['id'])-10000)//10
+                if temp in l_result_new_char:
+                    i+=1
+                    continue
+                l_result_new_char.append(temp)
+                result += f"id={temp} char={l_temp[i]['n']}\n"
+                i+=1
+            await message.channel.send(result)
+        except:
+            pass
         return
         
     if message.content.lower().startswith('?labyrinth'):
