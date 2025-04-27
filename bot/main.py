@@ -1,6 +1,7 @@
 import os
 import discord
 import asyncio
+import requests
 from botUI import utilityUI, funUI, privateUI, publicUI , publicUI_kirby
 from checkupdate import checkupdate,event_check
 from nick import loadnick, loadsp
