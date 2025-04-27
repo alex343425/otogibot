@@ -877,6 +877,10 @@ async def publicUI(message,bot):
                         continue
                     if y['rmid'] == x['rmid']:
                         myembed.add_field(name="【專飾品】" + y['n'], value=y['d'], inline=False)
+                for y in skill_for_search:
+                    if f"{x['n']}」に装備時" in y['d']:                                            
+                        myembed.add_field(name="【課金專飾品】" + y['n'], value=y['d'], inline=False)
+                        break
                 
                 
                 sp_classify=''

@@ -87,13 +87,29 @@ async def on_message(message):
             # 無法發送DM，可能用戶設定不接受DM
             print(f"無法發送DM給 {message.author}")
     
-    if message.channel.id == 803624040529920001 and "謝謝海苔" in message.content:
+    if message.channel.id == 803624040529920001 and "海苔" in message.content:
         utc_time = datetime.utcnow()
         # 定義 GMT+9 的時區
         gmt_plus_9 = pytz.timezone('Asia/Tokyo')  # GMT+9 對應的時區
         # 將 UTC 時間轉換為 GMT+9
         gmt_plus_9_time = utc_time.replace(tzinfo=pytz.utc).astimezone(gmt_plus_9)
-        comparison_time = gmt_plus_9.localize(datetime(2025, 3, 16, 3, 0, 0))
+        
+        
+        # 預設值
+        default_date = (2025, 1, 1)
+        # 讀取網址
+        url = 'https://raw.githubusercontent.com/alex343425/otogibot/refs/heads/main/bot/date.txt'
+        try:
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()  # 如果HTTP狀態不是200會拋例外
+            date_text = response.text.strip()  # 像 "2025, 5, 5"
+            year, month, day = map(int, date_text.split(','))
+        except Exception as e:
+            print(f"讀取日期失敗，使用預設值: {e}")
+            year, month, day = default_date
+
+        # 組合 comparison_time
+        comparison_time = gmt_plus_9.localize(datetime(year, month, day, 3, 0, 0))
         if gmt_plus_9_time < comparison_time:
             try:
                 await message.author.send("https://mega.nz/folder/HRRxHSaC#dDdCYEtoOt0QoDvKEvR4NQ") 
