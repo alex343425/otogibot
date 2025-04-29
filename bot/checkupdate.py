@@ -428,7 +428,8 @@ async def checkupdate(bot):
                 myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
                 myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
                 myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
-                r=requests.get(url, headers={'token': cfg.token_jp}).json()['AvailableGachas']
+                url_UGachas = 'https://otogi-rest.otogi-frontier.com/api/UGachas?include='
+                r=requests.get(url_UGachas, headers={'token': cfg.token_jp}).json()['AvailableGachas']
                 if free_gacha_check(r):
                     myembed_event.add_field(name="免費十連",value='現在有免費十連抽，記得抽',inline=False)
                 if gold_gacha_check(r):
