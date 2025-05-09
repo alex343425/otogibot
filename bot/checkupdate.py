@@ -103,10 +103,7 @@ def event_check():
             l2.append(('天墜霊殿',CollapsedTemple,0))
     except:
         pass
-    #2025-2-27看劇情活動
-    y = datetime.strptime('2025-2-27T12:59:59', "%Y-%m-%dT%H:%M:%S")
-    l2.append(('看希臘主線劇情200石',y,0))
-    
+
     flag_3day = False
     flag_1day = False
     s_mention=''
@@ -115,9 +112,8 @@ def event_check():
     for x,y,z in l2:
         y = y.replace(tzinfo=pytz.timezone('Asia/Tokyo'))
         t = y - gmt_plus_9_time
-        if t.days < 0:
-            if x != '看希臘主線劇情200石':
-                s +=f"僅領取報酬: {x}\n"
+        if t.days < 0:            
+            s +=f"僅領取報酬: {x}\n"
             continue
         s +=f"{t.days}天 {int((t.seconds)/3600)+1}小時: {x}\n"
         if t.days<=3:
@@ -165,9 +161,20 @@ def event_check():
     s+=f"{t.days}天 {int((t.seconds)/3600)+1}小時: 金字塔/競技場刷新\n"
     if t.days<=1:
         s_mention+="<@&1288132586274553938> "
+    
+    # 新增：周年慶倒數 (8月30日)
+    # 取得當前年份的 8 月 30 日 23:59:59 (GMT+9)
+    anniversary_date = gmt_plus_9.localize(datetime(gmt_plus_9_time.year, 8, 30, 0, 0, 0))
+    if anniversary_date < gmt_plus_9_time:
+        # 如果今年的 8/30 已過，改算明年的
+        anniversary_date = gmt_plus_9.localize(datetime(gmt_plus_9_time.year + 1, 8, 30, 0, 0, 0))
+    t = anniversary_date - gmt_plus_9_time
+    if t.days < 100:
+        s += f"{t.days}天 {int((t.seconds)/3600)+1}小時: 周年慶倒數(8月30日)\n"    
+    
     l_result.append(s)    
     s_mention+="<@&999704934264078576>"
-    l_result.append(s_mention)       
+    l_result.append(s_mention)
     return l_result
 
 def free_gacha_check(r):    
