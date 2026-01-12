@@ -58,32 +58,39 @@ publicUICommandList = {'?char',
                        }
 publicUICommandList_kirby={'?公告','?圖片'}
 
-# --- 新增功能區塊：自訂指令載入邏輯 ---
+# --- 新增功能區塊：自訂指令載入邏輯 (改為讀取網址) ---
 custom_commands_list = []
 
 def load_custom_commands():
-    """讀取同目錄下的 Commands.txt"""
+    """從 GitHub 網址讀取 Commands.txt"""
     global custom_commands_list
-    file_path = 'Commands.txt'
-    if not os.path.exists(file_path):
-        print(f"找不到 {file_path}，跳過載入自訂指令。")
-        return
-
+    # 指定 GitHub Raw 網址
+    url = 'https://raw.githubusercontent.com/alex343425/otogibot/refs/heads/main/bot/Commands.txt'
+    
     try:
-        # 建議檔案使用 UTF-8 編碼
-        with open(file_path, 'r', encoding='utf-8') as f:
-            lines = [line.strip() for line in f.readlines()]
-            
-        # 以每兩行為一組：單數行為觸發(index i)，雙數行為回復(index i+1)
-        for i in range(0, len(lines), 2):
-            if i + 1 < len(lines):
-                trigger = lines[i]
-                response = lines[i+1]
-                # 確保觸發詞和回復都不是空的
-                if trigger and response:
-                    custom_commands_list.append((trigger, response))
+        print(f"正在從網址讀取指令: {url}")
+        response = requests.get(url, timeout=10) # 設定 10 秒超時
         
-        print(f"成功載入 {len(custom_commands_list)} 組自訂指令。")
+        if response.status_code == 200:
+            response.encoding = 'utf-8' # 強制設定編碼為 utf-8，避免亂碼
+            lines = [line.strip() for line in response.text.splitlines()]
+            
+            # 清空舊清單 (防止重複載入)
+            custom_commands_list = []
+            
+            # 以每兩行為一組：單數行為觸發(index i)，雙數行為回復(index i+1)
+            for i in range(0, len(lines), 2):
+                if i + 1 < len(lines):
+                    trigger = lines[i]
+                    response_text = lines[i+1]
+                    # 確保觸發詞和回復都不是空的
+                    if trigger and response_text:
+                        custom_commands_list.append((trigger, response_text))
+            
+            print(f"成功載入 {len(custom_commands_list)} 組自訂指令。")
+        else:
+            print(f"讀取失敗，HTTP 狀態碼: {response.status_code}")
+            
     except Exception as e:
         print(f"讀取 Commands.txt 時發生錯誤: {e}")
 # --------------------------------------
@@ -115,9 +122,9 @@ async def on_message(message):
     # --- 新增功能區塊：自訂指令判斷 ---
     # 邏輯：檢查訊息開頭是否符合 Commands.txt 中的設定
     # 由於列表是有序的，會優先觸發檔案中排序較前的指令
-    for trigger, response in custom_commands_list:
+    for trigger, response_text in custom_commands_list:
         if message.content.startswith(trigger):
-            await message.channel.send(response)
+            await message.channel.send(response_text)
             #return # 觸發後直接結束，不再進行後續特定的指令判斷
     # --------------------------------
 
