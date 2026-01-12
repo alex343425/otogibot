@@ -9,6 +9,7 @@ from io import BytesIO
 from bs4 import BeautifulSoup
 import pytz
 import calendar
+import sys
 
 def get_last_day_of_month_23_59(gmt_plus_9_time):
 
@@ -248,11 +249,30 @@ async def checkupdate(bot):
     except:
         await starting_channel.send('公告處理失敗')
         failure = 1
+        
+    # 為了確保每天只觸發一次重啟，我們記錄上次重啟的日期
+    last_restart_date = None
     
     while True:
         if failure == 1:
             break
-        await asyncio.sleep(30)
+        await asyncio.sleep(30)    
+        # --- 定時重啟邏輯開始 ---
+        # 取得台灣時間 (GMT+8)
+        tz_taiwan = pytz.timezone('Asia/Taipei')
+        now_tw = datetime.now(tz_taiwan)
+
+        # 檢查是否為凌晨 04:00，且今天還沒重啟過
+        if now_tw.hour == 4 and now_tw.minute == 0 and last_restart_date != now_tw.date():
+            print(f"[{now_tw}] 執行定時重啟...")
+            starting_channel = bot.get_channel(855880177224253440)
+            if starting_channel:
+                await starting_channel.send("系統執行預定每日重啟 (凌晨 04:00)")
+            
+            await bot.close() # 安全關閉 Discord 連線
+            sys.exit(0)      # 結束程式，觸發 Heroku 自動重啟
+        # --- 定時重啟邏輯結束 ---
+        
         current_time = str(datetime.now()).split(' ')
         
         if current_time[1][3:5] in ['03','08','13','18','23','28','33','38','43','48','53','58']:
