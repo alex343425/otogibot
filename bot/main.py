@@ -33,11 +33,11 @@ utilityUICommandList = {'!ping'
 funUICommandList = {'?rotate'
                     }
 
-privateUICommandList = {'?getcg',
-                        '?inspect',
+privateUICommandList = {#'?getcg',
+                        #'?inspect',
                         '?beid',
-                        '?loadnick',
-                        '?loadsp',
+                        #'?loadnick',
+                        #'?loadsp',
                         '?update',
                         '?labyrinth',
                         '?palace'
@@ -45,23 +45,54 @@ privateUICommandList = {'?getcg',
 
 publicUICommandList = {'?char',
                        '？char',
-                       '?nick',
-                       '？nick',
+                       #'?nick',
+                       #'？nick',
                        '?spirit',
                        '？spirit',
                        '?be',
-                       '？be',
-                       '?卡池',
-                       '？卡池',
-                       '!story',
-                       '!event'                       
+                       '？be'
+                       #'?卡池',
+                       #'？卡池',
+                       #'!story',
+                       #'!event'                       
                        }
 publicUICommandList_kirby={'?公告','?圖片'}
+
+# --- 新增功能區塊：自訂指令載入邏輯 ---
+custom_commands_list = []
+
+def load_custom_commands():
+    """讀取同目錄下的 Commands.txt"""
+    global custom_commands_list
+    file_path = 'Commands.txt'
+    if not os.path.exists(file_path):
+        print(f"找不到 {file_path}，跳過載入自訂指令。")
+        return
+
+    try:
+        # 建議檔案使用 UTF-8 編碼
+        with open(file_path, 'r', encoding='utf-8') as f:
+            lines = [line.strip() for line in f.readlines()]
+            
+        # 以每兩行為一組：單數行為觸發(index i)，雙數行為回復(index i+1)
+        for i in range(0, len(lines), 2):
+            if i + 1 < len(lines):
+                trigger = lines[i]
+                response = lines[i+1]
+                # 確保觸發詞和回復都不是空的
+                if trigger and response:
+                    custom_commands_list.append((trigger, response))
+        
+        print(f"成功載入 {len(custom_commands_list)} 組自訂指令。")
+    except Exception as e:
+        print(f"讀取 Commands.txt 時發生錯誤: {e}")
+# --------------------------------------
 
 loadnick()
 loadsp()
 updatemfiles()
 skillsourcecate()
+load_custom_commands() # 執行載入自訂指令
 cfg.check_day = datetime.now().date() - timedelta(days=1)
 
 @bot.event
@@ -80,6 +111,16 @@ async def on_message(message):
         pass
     else:
         return
+
+    # --- 新增功能區塊：自訂指令判斷 ---
+    # 邏輯：檢查訊息開頭是否符合 Commands.txt 中的設定
+    # 由於列表是有序的，會優先觸發檔案中排序較前的指令
+    for trigger, response in custom_commands_list:
+        if message.content.startswith(trigger):
+            await message.channel.send(response)
+            #return # 觸發後直接結束，不再進行後續特定的指令判斷
+    # --------------------------------
+
     # 添加新功能: 當有人在頻道ID = 803624040529920001內輸入「謝謝」時，發送Direct Message
     if message.channel.id == 803624040529920001 and "謝謝緋神" in message.content:
         try:
