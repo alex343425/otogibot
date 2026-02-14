@@ -173,27 +173,17 @@ async def on_message(message):
                 print(f"無法為訊息 {message.id} 添加表情")
         else:
             try:
-                await message.author.send(f"期限已過，本次只到 {comparison_time}，現在是 {gmt_plus_9_time}")
+                await message.author.send(f"期限已過，本次只到 {comparison_time}，現在是 {gmt_plus_9_time}，下次開放時間請關注更新情報頻道。")
             except discord.Forbidden:
                 # 無法發送DM，可能用戶設定不接受DM
                 print(f"無法發送DM給 {message.author}")
             # 嘗試添加表情反應
             try:
-                emoji = "<:645961926219661334:683400196461428771>"  # 使用完整表情格式
+                emoji = "<:juuchao_X_X:1376207289660473434>"  # 使用完整表情格式
                 await message.add_reaction(emoji)
             except discord.HTTPException:
                 print(f"無法為訊息 {message.id} 添加表情")
                 
-    if '!呼叫活動通知' in message.content:
-        l_result = event_check()
-        if len(l_result)>1:
-            reminder_channel_alt = bot.get_channel(624974729689694230)
-            myembed_event = discord.Embed(title="活動提醒",colour=0x00b0f4)
-            myembed_event.add_field(name="限時活動",value=l_result[0],inline=False)
-            myembed_event.add_field(name="常態活動",value=l_result[1],inline=False)
-            await reminder_channel_alt.send(content=l_result[2],embed=myembed_event)
-  
-
     if "@everyone" in message.content:
         # 踢除用户
         await message.guild.ban(message.author, reason="提及了 everyone", delete_message_seconds=3600)
@@ -201,7 +191,25 @@ async def on_message(message):
         # 发送通知
         await message.channel.send(f"{message.author.mention} 由於提及了 everyone，已被踢除！")
         #####測試
-       
+    
+    # 檢查是否為指定的頻道
+    if message.channel.id == 717056995995156480:        
+        # 篩選條件：
+        # 1. 附件數量剛好為 4
+        # 2. 訊息文字內容為空 (去除前後空白後長度為 0)
+        if len(message.attachments) == 4 and not message.content.strip():
+            try:
+                # 執行停權 (Ban)
+                reason = "發送四張圖片且無文字的違規訊息"
+                await message.guild.ban(message.author, reason=reason, delete_message_seconds=3600)                
+                # 選項：在頻道內發送通知 (可刪除此行)
+                # print(f"已封鎖使用者 {message.author}，原因：符合四圖篩選條件。")                
+                await message.channel.send(f"{message.author.mention} 疑似發送廣告訊息，已被踢除！")
+            except discord.Forbidden:
+                print("錯誤：Bot 權限不足，無法停權該成員。")
+            except discord.HTTPException as e:
+                print(f"停權失敗：{e}")
+               
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
         return
