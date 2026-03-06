@@ -658,7 +658,9 @@ async def publicUI(message,bot):
                     norepeated.append(x['tm'])
             if search_result:
                 name_jp = str(list_num) + '.技能名:' + x['n'] + '【' + setskilltype(skillcate)
-                name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr']) 
+                name_jp += '】' + skillclass(x['sc']) + skillrank(x['sr'])
+                if x['ct'] > 0:
+                    name_jp += f"CT: {x['ct']}秒"
                 if result_list_display == False:
                     text_jp = '效果:' + x['d'] + '\n'
                 else:
@@ -852,7 +854,7 @@ async def publicUI(message,bot):
                 for y in skill_for_search:
                     if y['rsid'] == x['vsid']:
                         if y['l'] == y['ml'] and y['d'] != '':
-                            myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']), value=y['d'], inline=False)
+                            myembed.add_field(name='【' + setskilltype(y['tc']) + '】' + y['n'] + ':' + skillclass(y['sc']) + skillrank(y['sr']) + ' CT: '+y['ct'], value=y['d'], inline=False)
                             
                 if int(str(int(x['id'])//10-1000)) in cfg.another_skill:
                     i=cfg.another_skill[int(str(int(x['id'])//10-1000))]
