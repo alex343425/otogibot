@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import pytz
 import calendar
 import sys
+import gzip
 
 def get_last_day_of_month_23_59(gmt_plus_9_time):
 
@@ -531,7 +532,6 @@ async def checkupdate(bot):
                 news_latest = news_latest_check.copy()
             overall_check_mark = 0
             news_i = 1
-            
             for x in news_now_check:
                 check_mark = 0
                 for y in news_now:
@@ -540,35 +540,39 @@ async def checkupdate(bot):
                         break
                 if check_mark == 0:
                     overall_check_mark = 1                    
-                    img_url = 'https://web-assets.otogi-frontier.com/static/sp/Banner/Info/' + x['ImagePath']
-                    img_url2 = 'https://az-otogi-web-assets.azureedge.net/static/sp/Banner/Info/' + x['ImagePath']
+                    
+                    # 處理 Windows 路徑反斜線，並將副檔名替換為 .dds.gz
+                    image_path_formatted = x['ImagePath'].replace('\\', '/')
+                    if image_path_formatted.lower().endswith('.png'):
+                        image_path_formatted = image_path_formatted[:-4] + '.dds.gz'
+                        
+                    img_url = 'https://web-assets.otogi-frontier.com/prod-static-images/sp/dds/Banner/Info/' + image_path_formatted
+                    
                     try:
-                        img = await get_img(img_url)
+                        # 取得 .gz 檔案並解壓縮
+                        response = requests.get(img_url)
+                        response.raise_for_status() # 確認檔案有成功下載
+                        dds_data = gzip.decompress(response.content)
+                        
+                        # 使用 PIL 讀取 DDS 圖片資料並轉存為 PNG
+                        img = Image.open(BytesIO(dds_data))
+                        img = ImageOps.flip(img)
                         img.save('news.png')
-                        file1 = discord.File('news.png',filename='news.png')
-                        file2 = discord.File('news.png',filename='news.png')
+                        
+                        file1 = discord.File('news.png', filename='news.png')
+                        file2 = discord.File('news.png', filename='news.png')
                         myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
                         myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
                         myembed.set_image(url="attachment://news.png")
+                        
                         await reminder_channel_alt.send(file=file1, embed=myembed)
                         await reminder_channel.send(file=file2, embed=myembed)
                         news_i += 1
-                    except:
-                        try:
-                            img = await get_img(img_url2)
-                            img.save('news.png')
-                            file1 = discord.File('news.png',filename='news.png')
-                            file2 = discord.File('news.png',filename='news.png')
-                            myembed = discord.Embed(title='【#' + str(news_i) + '】', color=10181046)
-                            myembed.set_author(name="新活動和轉蛋", icon_url=cfg.icon_url)                
-                            myembed.set_image(url="attachment://news.png")
-                            await reminder_channel_alt.send(file=file1, embed=myembed)
-                            await reminder_channel.send(file=file2, embed=myembed)
-                            news_i += 1
-                        except:
-                            await starting_channel.send('獲取活动圖片失敗')
-                            await starting_channel.send(img_url)
-                            await starting_channel.send(img_url2)
+                    except Exception as e:
+                        # 加入錯誤訊息以便未來除錯
+                        await starting_channel.send(f'獲取活動圖片失敗: {e}')
+                        await starting_channel.send(img_url)
+                        
             if overall_check_mark == 1:
                 news_now = news_now_check.copy()
             overall_check_mark = 0
