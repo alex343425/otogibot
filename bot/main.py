@@ -15,6 +15,12 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!",intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
 
+# 最近的疑似廣告違規紀錄，最多保留 10 筆
+# 每筆資料格式：{"user_id": 使用者ID, "channel_id": 頻道ID}
+violation_records = []
+MAX_VIOLATION_RECORDS = 10
+AD_ALERT_CHANNEL_ID = 624975992947081229
+
 guild_ids = {855879876815618078, # Test Server
              624974729689694228  # Main Server
             }
@@ -33,11 +39,7 @@ utilityUICommandList = {'!ping'
 funUICommandList = {'?rotate'
                     }
 
-privateUICommandList = {#'?getcg',
-                        #'?inspect',
-                        '?beid',
-                        #'?loadnick',
-                        #'?loadsp',
+privateUICommandList = {'?beid',
                         '?update',
                         '?labyrinth',
                         '?palace'
@@ -45,16 +47,10 @@ privateUICommandList = {#'?getcg',
 
 publicUICommandList = {'?char',
                        '？char',
-                       #'?nick',
-                       #'？nick',
                        '?spirit',
                        '？spirit',
                        '?be',
                        '？be'
-                       #'?卡池',
-                       #'？卡池',
-                       #'!story',
-                       #'!event'                       
                        }
 publicUICommandList_kirby={'?公告','?圖片'}
 
@@ -125,7 +121,6 @@ async def on_message(message):
     for trigger, response_text in custom_commands_list:
         if message.content.startswith(trigger):
             await message.channel.send(response_text)
-            #return # 觸發後直接結束，不再進行後續特定的指令判斷
     # --------------------------------
 
     # 添加新功能: 當有人在頻道ID = 803624040529920001內輸入「謝謝」時，發送Direct Message
@@ -192,23 +187,80 @@ async def on_message(message):
         await message.channel.send(f"{message.author.mention} 由於提及了 everyone，已被踢除！")
         #####測試
     
-    # 檢查是否為指定的頻道
-    if message.channel.id == 717056995995156480:        
-        # 篩選條件：
-        # 1. 附件數量剛好為 4
-        # 2. 訊息文字內容為空 (去除前後空白後長度為 0)
-        if len(message.attachments) == 4 and not message.content.strip():
+    # 疑似廣告訊息判定：剛好 4 個附件，而且沒有任何文字內容
+    if len(message.attachments) == 4 and not message.content.strip():
+        # 原本的特殊頻道邏輯保留：此頻道符合條件時直接 Ban
+        if message.channel.id == 717056995995156480:
             try:
-                # 執行停權 (Ban)
                 reason = "發送四張圖片且無文字的違規訊息"
-                await message.guild.ban(message.author, reason=reason, delete_message_seconds=3600)                
-                # 選項：在頻道內發送通知 (可刪除此行)
-                # print(f"已封鎖使用者 {message.author}，原因：符合四圖篩選條件。")                
-                await message.channel.send(f"{message.author.mention} 疑似發送廣告訊息，已被踢除！")
+                await message.guild.ban(
+                    message.author,
+                    reason=reason,
+                    delete_message_seconds=3600
+                )
+                await message.channel.send(
+                    f"{message.author.mention} 疑似發送廣告訊息，已被踢除！"
+                )
             except discord.Forbidden:
                 print("錯誤：Bot 權限不足，無法停權該成員。")
             except discord.HTTPException as e:
                 print(f"停權失敗：{e}")
+
+        # 其他頻道：加入最近 10 筆違規紀錄，跨 3 個不同頻道累積 3 次才 Ban
+        else:
+            violation_records.append({
+                "user_id": message.author.id,
+                "channel_id": message.channel.id
+            })
+
+            # 只保留最近 10 筆違規紀錄；第 11 筆加入時刪除最舊的一筆
+            if len(violation_records) > MAX_VIOLATION_RECORDS:
+                violation_records.pop(0)
+
+            # 取出目前這名使用者在最近 10 筆紀錄中的所有違規
+            user_records = [
+                record for record in violation_records
+                if record["user_id"] == message.author.id
+            ]
+            user_channel_ids = {record["channel_id"] for record in user_records}
+
+            # 同一使用者違規至少 3 筆，而且來自至少 3 個不同頻道時停權
+            if len(user_records) >= 3 and len(user_channel_ids) >= 3:
+                reason = "疑似在至少三個不同頻道發送四張圖片且無文字的廣告訊息"
+                try:
+                    await message.guild.ban(
+                        message.author,
+                        reason=reason,
+                        delete_message_seconds=3600
+                    )
+
+                    # Ban 成功後清除該使用者的違規紀錄，避免重複觸發
+                    violation_records[:] = [
+                        record for record in violation_records
+                        if record["user_id"] != message.author.id
+                    ]
+
+                    # 在指定頻道發送停權通知
+                    alert_channel = bot.get_channel(AD_ALERT_CHANNEL_ID)
+                    if alert_channel is None:
+                        try:
+                            alert_channel = await bot.fetch_channel(AD_ALERT_CHANNEL_ID)
+                        except (discord.Forbidden, discord.NotFound, discord.HTTPException) as e:
+                            print(f"取得廣告停權通知頻道失敗：{e}")
+                            alert_channel = None
+
+                    if alert_channel is not None:
+                        try:
+                            await alert_channel.send(
+                                f"{message.author.mention} 疑似發送廣告訊息，已被停權"
+                            )
+                        except discord.HTTPException as e:
+                            print(f"發送廣告停權通知失敗：{e}")
+
+                except discord.Forbidden:
+                    print("錯誤：Bot 權限不足，無法停權該成員。")
+                except discord.HTTPException as e:
+                    print(f"停權失敗：{e}")
                
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
