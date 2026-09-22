@@ -227,7 +227,7 @@ async def checkupdate(bot):
         sack_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/99142', headers={'token': cfg.token_jp}).json()["Level"]
         Be_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/61640', headers={'token': cfg.token_jp}).json()["Level"]
         Scarlet_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/835519', headers={'token': cfg.token_jp}).json()["Level"]
-        Kirby_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
+        Kirby_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/2241074', headers={'token': cfg.token_jp}).json()["Level"]
         bu_level = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
         failure = 0
     except:
@@ -285,7 +285,7 @@ async def checkupdate(bot):
                 sack_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/99142', headers={'token': cfg.token_jp}).json()["Level"]
                 Be_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/61640', headers={'token': cfg.token_jp}).json()["Level"]
                 Scarlet_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/835519', headers={'token': cfg.token_jp}).json()["Level"]
-                Kirby_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/553222', headers={'token': cfg.token_jp}).json()["Level"]
+                Kirby_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/2241074', headers={'token': cfg.token_jp}).json()["Level"]
                 bu_level_check = requests.get('https://api-pc.otogi-frontier.com/api/UFriend/Detail/521954', headers={'token': cfg.token_jp}).json()["Level"]
             except:
                 continue
@@ -311,7 +311,7 @@ async def checkupdate(bot):
                     await private_chat_channel.send(text)
                     Scarlet_level = Scarlet_level_check
                 if Kirby_level_check > Kirby_level:
-                    text = 'Kirby等級變動.由' + str(Kirby_level) + '升為' + str(Kirby_level_check) + '.'
+                    text = 'グリント等級變動.由' + str(Kirby_level) + '升為' + str(Kirby_level_check) + '.'
                     await private_chat_channel.send(text)
                     Kirby_level = Kirby_level_check
                 if bu_level_check > bu_level:
