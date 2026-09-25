@@ -2,6 +2,10 @@ import os
 import discord
 import asyncio
 import requests
+import hashlib
+import io
+import math
+from PIL import Image
 from botUI import utilityUI, funUI, privateUI, publicUI , publicUI_kirby
 from checkupdate import checkupdate,event_check
 from nick import loadnick, loadsp
@@ -10,6 +14,113 @@ from discord.ext import commands
 from datetime import datetime, timedelta
 import cfg
 import pytz
+
+# --- 廣告圖片比對設定：SHA-256 + pHash ---
+AD_IMAGE_FILENAMES = ["1.jpg", "2.jpg", "3.jpg", "4.jpg"]
+PHASH_THRESHOLD = 5  # Hamming distance <= 8 視為相似；越小越嚴格
+
+
+def calculate_phash(image_bytes, hash_size=8, highfreq_factor=4):
+    """使用 Pillow 計算 64-bit pHash，不依賴 imagehash / scipy / numpy。"""
+    size = hash_size * highfreq_factor  # 8 * 4 = 32
+
+    with Image.open(io.BytesIO(image_bytes)) as img:
+        img = img.convert("L").resize((size, size), Image.Resampling.LANCZOS)
+        pixels = list(img.getdata())
+
+    # 只計算 DCT 左上角 hash_size x hash_size 的低頻係數。
+    cos_table = [
+        [math.cos((2 * x + 1) * u * math.pi / (2 * size)) for x in range(size)]
+        for u in range(hash_size)
+    ]
+
+    coeffs = []
+    for v in range(hash_size):
+        cos_v = cos_table[v]
+        for u in range(hash_size):
+            cos_u = cos_table[u]
+            value = 0.0
+            for y in range(size):
+                row_offset = y * size
+                cy = cos_v[y]
+                for x in range(size):
+                    value += pixels[row_offset + x] * cos_u[x] * cy
+            coeffs.append(value)
+
+    # 忽略 DC 係數，用其餘 63 個低頻係數的中位數作門檻。
+    sorted_coeffs = sorted(coeffs[1:])
+    median = sorted_coeffs[len(sorted_coeffs) // 2]
+
+    phash = 0
+    for value in coeffs:
+        phash = (phash << 1) | (1 if value > median else 0)
+    return phash
+
+
+def phash_distance(hash_a, hash_b):
+    """計算兩個 64-bit pHash 的 Hamming distance。"""
+    return (hash_a ^ hash_b).bit_count()
+
+
+def load_ad_image_hashes():
+    """程式啟動時載入同目錄 1.jpg ~ 4.jpg 的 SHA-256 與 pHash。"""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    references = []
+
+    for filename in AD_IMAGE_FILENAMES:
+        path = os.path.join(base_dir, filename)
+        if not os.path.isfile(path):
+            print(f"廣告參考圖片不存在，略過：{path}")
+            continue
+
+        try:
+            with open(path, "rb") as f:
+                data = f.read()
+
+            references.append({
+                "filename": filename,
+                "sha256": hashlib.sha256(data).hexdigest(),
+                "phash": calculate_phash(data)
+            })
+            print(f"已載入廣告參考圖片：{filename}")
+        except Exception as e:
+            print(f"載入廣告參考圖片 {filename} 失敗：{e}")
+
+    return references
+
+
+def match_ad_image(image_bytes):
+    """
+    回傳 (是否命中, 比對方式, 參考檔名, pHash距離)。
+    先做 SHA-256 完全比對，再做 pHash 相似度比對。
+    """
+    sha256 = hashlib.sha256(image_bytes).hexdigest()
+
+    for ref in ad_image_hashes:
+        if sha256 == ref["sha256"]:
+            return True, "SHA-256", ref["filename"], 0
+
+    try:
+        current_phash = calculate_phash(image_bytes)
+    except Exception:
+        return False, None, None, None
+
+    best_ref = None
+    best_distance = None
+    for ref in ad_image_hashes:
+        distance = phash_distance(current_phash, ref["phash"])
+        if best_distance is None or distance < best_distance:
+            best_distance = distance
+            best_ref = ref
+
+    if best_ref is not None and best_distance <= PHASH_THRESHOLD:
+        return True, "pHash", best_ref["filename"], best_distance
+
+    return False, None, None, best_distance
+
+
+ad_image_hashes = load_ad_image_hashes()
+# ------------------------------------------
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!",intents=intents)
@@ -262,6 +373,48 @@ async def on_message(message):
                 except discord.HTTPException as e:
                     print(f"停權失敗：{e}")
                
+    # 廣告圖片比對：放在跨頻道違規紀錄判定之後執行。
+    # 只要任何一個附件與 1.jpg ~ 4.jpg 的 SHA-256 完全相同，
+    # 或 pHash 足夠相似，就刪除整則訊息；目前不會因圖片比對直接停權。
+    if message.attachments and ad_image_hashes:
+        for attachment in message.attachments:
+            try:
+                attachment_bytes = await attachment.read()
+            except (discord.Forbidden, discord.HTTPException) as e:
+                print(f"讀取附件失敗 {attachment.filename}：{e}")
+                continue
+
+            matched, method, ref_filename, distance = await asyncio.to_thread(
+                match_ad_image,
+                attachment_bytes
+            )
+
+            if matched:
+                try:
+                    await message.delete()
+                    if method == "SHA-256":
+                        print(
+                            f"已刪除廣告圖片訊息：user={message.author.id}, "
+                            f"channel={message.channel.id}, attachment={attachment.filename}, "
+                            f"match={ref_filename}, method=SHA-256"
+                        )
+                    else:
+                        print(
+                            f"已刪除廣告圖片訊息：user={message.author.id}, "
+                            f"channel={message.channel.id}, attachment={attachment.filename}, "
+                            f"match={ref_filename}, method=pHash, distance={distance}"
+                        )
+                except discord.NotFound:
+                    # 訊息可能已被前面的 Ban 邏輯一併刪除。
+                    pass
+                except discord.Forbidden:
+                    print("錯誤：Bot 權限不足，無法刪除匹配廣告圖片的訊息。")
+                except discord.HTTPException as e:
+                    print(f"刪除廣告圖片訊息失敗：{e}")
+
+                # 一則訊息只需要命中一個附件就刪除，不再繼續下載/比對其他附件。
+                return
+
     if message.content.split(' ')[0] in funUICommandList:
         await funUI(message,bot)
         return
